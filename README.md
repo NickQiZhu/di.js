@@ -1,3 +1,5 @@
+[![build status](https://secure.travis-ci.org/NickQiZhu/di.js.png)](http://travis-ci.org/NickQiZhu/di.js)
+
 di.js
 =====
 
