@@ -2,5 +2,11 @@ Backbone = require("backbone");
 
 require("../di");
 
-Profile = Backbone.Model.extend({});
-Address = Backbone.Model.extend({});
+Profile = Backbone.Model.extend({
+    name:"profile",
+    dependencies: "address"
+});
+
+Address = Backbone.Model.extend({
+    name:"address"
+});

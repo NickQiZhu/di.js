@@ -26,6 +26,16 @@ di = {
             return ctx.map[name];
         };
 
+        ctx.initialize = function(){
+            var name;
+            for(name in ctx.map){
+                var o = ctx.find(name);
+                var dependencyName = o.dependencies;
+                var dependency = ctx.find(dependencyName);
+                o[dependencyName] = dependency;
+            }
+        };
+
         return ctx;
     }
 };
