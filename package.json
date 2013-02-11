@@ -27,6 +27,6 @@
     "backbone": "0.9.10"
   },
   "scripts": {
-    "test": "./node_modules/jasmine-node/bin/jasmine-node"
+    "test": "./node_modules/jasmine-node/bin/jasmine-node spec"
   }
 }

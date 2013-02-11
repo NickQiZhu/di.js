@@ -17,5 +17,5 @@ require("util").puts(JSON.stringify({
     "sinon": "1.5.2",
     "backbone": "0.9.10"
   },
-  "scripts": {"test": "./node_modules/jasmine-node/bin/jasmine-node"}
+  "scripts": {"test": "./node_modules/jasmine-node/bin/jasmine-node spec"}
 }, null, 2));
