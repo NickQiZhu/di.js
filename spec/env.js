@@ -3,10 +3,15 @@ Backbone = require("backbone");
 require("../di");
 
 Profile = Backbone.Model.extend({
-    name:"profile",
+    id:"profile",
     dependencies: "address"
 });
 
 Address = Backbone.Model.extend({
-    name:"address"
+    id:"address",
+    dependencies: "creditCard"
+});
+
+CreditCard = Backbone.Model.extend({
+    id:"credit_card"
 });

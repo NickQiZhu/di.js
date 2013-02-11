@@ -9,11 +9,13 @@ describe("common", function () {
 describe("context", function () {
     var ctx;
     var profileName = "profile";
+    var addressName = "address";
 
     beforeEach(function () {
         ctx = di.createContext();
         ctx.register(profileName, Profile);
-        ctx.register("address", Address);
+        ctx.register(addressName, Address);
+        ctx.register("creditCard", CreditCard);
         ctx.initialize();
     });
 
@@ -23,7 +25,7 @@ describe("context", function () {
 
     describe("dependency resolution", function () {
         it("can resolve simple dependency", function () {
-            expect(ctx.find(profileName).address instanceof Address).toBeTruthy();
+            expect(ctx.find(addressName).creditCard instanceof CreditCard).toBeTruthy();
         });
     });
 });
