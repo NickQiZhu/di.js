@@ -10,6 +10,9 @@ Profile = Backbone.Model.extend({
             return true;
 
         return false;
+    },
+    ready: function(){
+        this.out = "ready";
     }
 });
 

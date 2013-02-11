@@ -127,6 +127,12 @@ describe("context", function () {
             expect(profile().checkDependencies()).toBeTruthy();
         });
     });
+
+    describe("lifecycle", function(){
+        it("should invoke ready after wiring", function(){
+            expect(profile().out).toBe("ready");
+        });
+    });
 });
 
 

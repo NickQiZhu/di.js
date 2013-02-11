@@ -31,18 +31,27 @@ di = {
         };
 
         ctx.initialize = function () {
-            var name;
-            for (name in ctx.map) {
-                var o = ctx.find(name);
-                if (o && o.dependencies) {
-                    var dependencyList = o.dependencies.split(" ");
-                    dependencyList.forEach(function (dependencyName) {
-                        var dependency = ctx.find(dependencyName);
-                        o[dependencyName] = dependency;
-                    });
-                }
+            for (var name in ctx.map) {
+                ready(inject(ctx.find(name)));
             }
         };
+
+        function inject(o) {
+            if (o && o.dependencies) {
+                var dependencyList = o.dependencies.split(" ");
+                dependencyList.forEach(function (dependencyName) {
+                    var dependency = ctx.find(dependencyName);
+                    o[dependencyName] = dependency;
+                });
+            }
+
+            return o;
+        }
+
+        function ready(o) {
+            if (typeof o.ready === 'function')
+                o.ready();
+        }
 
         return ctx;
     },
@@ -57,7 +66,7 @@ di = {
 
         entry.value = function (v) {
             if (!arguments.length) {
-                if (value == null)
+                if (!value)
                     value = factory(type, args);
 
                 if (strategy === di.strategy.proto)
