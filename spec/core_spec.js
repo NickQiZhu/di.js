@@ -82,9 +82,26 @@ describe("context", function () {
     });
 
     it("can support constructor arguments in array", function () {
-        expect(profileCollection().size()).toBe(1);
         expect(profileCollection().pop().get("name")).toBe("Joe");
         expect(profileCollection().comparator).toBe(comparator);
+    });
+
+    it("can support function invocation wo/ args", function () {
+        var name = "func";
+        ctx.register(name,function () {
+            return "test"
+        }).factory(di.factory.func);
+        ctx.initialize();
+        expect(ctx.find(name) == "test").toBeTruthy();
+    });
+
+    it("can support function invocation wo/ args", function () {
+        var name = "func";
+        ctx.register(name,function (s) {
+            return new String(s);
+        }, "test").factory(di.factory.func);
+        ctx.initialize();
+        expect(ctx.find(name) == "test").toBeTruthy();
     });
 
     describe("dependency resolution", function () {

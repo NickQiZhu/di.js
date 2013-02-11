@@ -34,7 +34,7 @@ di = {
             var name;
             for (name in ctx.map) {
                 var o = ctx.find(name);
-                if (o.dependencies) {
+                if (o && o.dependencies) {
                     var dependencyList = o.dependencies.split(" ");
                     dependencyList.forEach(function (dependencyName) {
                         var dependency = ctx.find(dependencyName);
@@ -88,6 +88,12 @@ di = {
             return entry;
         };
 
+        entry.factory = function (f) {
+            if (!arguments.length) return factory;
+            factory = f;
+            return entry;
+        };
+
         return entry;
     },
 
@@ -98,19 +104,23 @@ di = {
         }
     },
 
-    factory:{
-        constructor: function(type, args){
-            if(args instanceof Array){
+    factory: {
+        constructor: function (type, args) {
+            if (args instanceof Array) {
                 var exp = "new type(";
                 var i = 0;
-                for(; i < args.length; ++i)
-                    exp += "args["+i+"],";
-                if(i > 0) exp = exp.slice(0, exp.length - 1);
+                for (; i < args.length; ++i)
+                    exp += "args[" + i + "],";
+                if (i > 0) exp = exp.slice(0, exp.length - 1);
                 exp += ")";
                 return eval(exp);
-            }else{
+            } else {
                 return new type(args);
             }
+        },
+
+        func: function (func, args) {
+            return func(args);
         }
     }
 };
