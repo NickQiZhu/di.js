@@ -53,14 +53,15 @@ di = {
         var value;
         var strategy;
         var args;
+        var factory = di.factory.constructor;
 
         entry.value = function (v) {
             if (!arguments.length) {
                 if (value == null)
-                    value = new type(args);
+                    value = factory(type, args);
 
                 if (strategy === di.strategy.proto)
-                    value = new type(args);
+                    value = factory(type, args);
 
                 return value;
             } else {
@@ -94,6 +95,22 @@ di = {
         proto: function () {
         },
         singleton: function () {
+        }
+    },
+
+    factory:{
+        constructor: function(type, args){
+            if(args instanceof Array){
+                var exp = "new type(";
+                var i = 0;
+                for(; i < args.length; ++i)
+                    exp += "args["+i+"],";
+                if(i > 0) exp = exp.slice(0, exp.length - 1);
+                exp += ")";
+                return eval(exp);
+            }else{
+                return new type(args);
+            }
         }
     }
 };

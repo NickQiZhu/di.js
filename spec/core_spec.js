@@ -6,12 +6,15 @@ describe("common", function () {
     });
 });
 
-
 describe("context", function () {
     var ctx;
     var profileName = "profile";
     var addressName = "address";
     var creditCardName = "creditCard";
+    var profileCollectionName = "profileCollection";
+    var comparator = function (profile) {
+        return profile.get("name");
+    };
 
     function profile() {
         return ctx.find(profileName);
@@ -21,11 +24,19 @@ describe("context", function () {
         return ctx.find(creditCardName);
     }
 
+    function profileCollection() {
+        return ctx.find(profileCollectionName);
+    }
+
     beforeEach(function () {
         ctx = di.createContext();
         ctx.register(profileName, Profile, {name: "Nick", job: "Less"});
         ctx.register(addressName, Address);
         ctx.register(creditCardName, CreditCard);
+        ctx.register(profileCollectionName, Profiles, [
+            [new Profile({name: "Joe", job: "Dev"})],
+            {comparator: comparator}
+        ]);
         ctx.initialize();
     });
 
@@ -52,8 +63,8 @@ describe("context", function () {
     });
 
     it("can support constructor arguments in object literal", function () {
-        expect(profile().attributes.name).toBe("Nick");
-        expect(profile().attributes.job).toBe("Less");
+        expect(profile().get("name")).toBe("Nick");
+        expect(profile().get("job")).toBe("Less");
     });
 
     it("can support constructor arguments in single value", function () {
@@ -64,11 +75,17 @@ describe("context", function () {
     });
 
     it("can support constructor arguments in single value", function () {
-            var name = "string";
-            ctx.register(name, String, "test");
-            ctx.initialize();
-            expect(ctx.find(name) == "test").toBeTruthy();
-        });
+        var name = "string";
+        ctx.register(name, String, "test");
+        ctx.initialize();
+        expect(ctx.find(name) == "test").toBeTruthy();
+    });
+
+    it("can support constructor arguments in array", function () {
+        expect(profileCollection().size()).toBe(1);
+        expect(profileCollection().pop().get("name")).toBe("Joe");
+        expect(profileCollection().comparator).toBe(comparator);
+    });
 
     describe("dependency resolution", function () {
         it("can resolve simple dependency", function () {

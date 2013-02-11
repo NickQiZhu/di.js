@@ -22,3 +22,7 @@ CreditCard = Backbone.Model.extend({
     id: "credit_card",
     dependencies: "address"
 });
+
+Profiles = Backbone.Collection.extend({
+    model: Profile
+});
