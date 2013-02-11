@@ -14,7 +14,8 @@ require("util").puts(JSON.stringify({
     "uglify-js": "2.2.1",
     "jasmine-node": "1.2.3",
     "jquery": "1.8.3",
-    "sinon": "1.5.2"
+    "sinon": "1.5.2",
+    "backbone": "0.9.10"
   },
   "scripts": {"test": "./node_modules/jasmine-node/bin/jasmine-node"}
 }, null, 2));
