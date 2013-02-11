@@ -33,6 +33,10 @@ describe("context", function () {
         expect(profile() instanceof Profile).toBeTruthy();
     });
 
+    it("by default use singleton strategy", function(){
+        expect(profile() === profile()).toBeTruthy();
+    });
+
     describe("dependency resolution", function () {
         it("can resolve simple dependency", function () {
             expect(creditCard().address instanceof Address).toBeTruthy();
@@ -46,6 +50,8 @@ describe("context", function () {
         it("dependencies are set to correct scope", function () {
             expect(profile().checkDependencies()).toBeTruthy();
         });
+
+
     });
 });
 
