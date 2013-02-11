@@ -6,11 +6,20 @@ describe("common", function () {
     });
 });
 
+
 describe("context", function () {
     var ctx;
     var profileName = "profile";
     var addressName = "address";
     var creditCardName = "creditCard";
+
+    function profile() {
+        return ctx.find(profileName);
+    }
+
+    function creditCard() {
+        return ctx.find(creditCardName);
+    }
 
     beforeEach(function () {
         ctx = di.createContext();
@@ -21,17 +30,21 @@ describe("context", function () {
     });
 
     it("can register object by key", function () {
-        expect(ctx.find(profileName) instanceof Profile).toBeTruthy();
+        expect(profile() instanceof Profile).toBeTruthy();
     });
 
     describe("dependency resolution", function () {
         it("can resolve simple dependency", function () {
-            expect(ctx.find(creditCardName).address instanceof Address).toBeTruthy();
+            expect(creditCard().address instanceof Address).toBeTruthy();
         });
 
         it("can resolve composite dependencies", function () {
-            expect(ctx.find(profileName).address instanceof Address).toBeTruthy();
-            expect(ctx.find(profileName).creditCard instanceof CreditCard).toBeTruthy();
+            expect(profile().address instanceof Address).toBeTruthy();
+            expect(profile().creditCard instanceof CreditCard).toBeTruthy();
+        });
+
+        it("dependencies are set to correct scope", function () {
+            expect(profile().checkDependencies()).toBeTruthy();
         });
     });
 });

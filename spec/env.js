@@ -4,7 +4,13 @@ require("../di");
 
 Profile = Backbone.Model.extend({
     id: "profile",
-    dependencies: "address creditCard"
+    dependencies: "address creditCard",
+    checkDependencies: function(){
+        if(this.address != null && this.creditCard != null)
+            return true;
+
+        return false;
+    }
 });
 
 Address = Backbone.Model.extend({
