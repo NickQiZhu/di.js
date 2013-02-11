@@ -1,13 +1,14 @@
 {
-  "name": "di",
-  "version": "0.1.0",
+  "name": "di-lite",
+  "version": "0.1.1",
   "description": "A ultra light-weight dependency injection container in Javascript ",
   "keywords": [
     "di",
     "ioc",
-    "container",
+    "ioc container",
     "dependency management",
-    "dependency injection"
+    "dependency injection",
+    "di container"
   ],
   "homepage": "http://nickqizhu.github.com/di.js/",
   "author": {

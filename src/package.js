@@ -1,10 +1,10 @@
 require("./core");
 
 require("util").puts(JSON.stringify({
-  "name": "di",
+  "name": "di-lite",
   "version": di.version,
   "description": "A ultra light-weight dependency injection container in Javascript ",
-  "keywords": ["di", "ioc", "container", "dependency management", "dependency injection"],
+  "keywords": ["di", "ioc", "ioc container", "dependency management", "dependency injection", "di container"],
   "homepage": "http://nickqizhu.github.com/di.js/",
   "author": {"name": "Nick Zhu", "url": "http://nzhu.blogspot.ca/"},
   "repository": {"type": "git", "url": "https://github.com/NickQiZhu/di.js.git"},

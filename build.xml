@@ -9,8 +9,8 @@
     </target>
 
     <target name="clean">
-        <delete file="di.js" />
-        <delete file="dc.min.js" />
+        <delete file="di-lite.js" />
+        <delete file="di-lite.min.js" />
         <delete file="package.json" />
     </target>
 
@@ -23,16 +23,16 @@
     </target>
 
     <target name="make" depends="clean, init">
-        <echo>Compiling di.js</echo>
-        <concat destfile="di.js">
+        <echo>Compiling di-lite.js</echo>
+        <concat destfile="di-lite.js">
             <file file="src/core.js"/>
             <file file="src/utils.js"/>
         </concat>
-        <echo>Compiling di.min.js</echo>
+        <echo>Compiling di-lite.min.js</echo>
         <exec executable="bash">
             <env key="NODE_PATH" value="${node.path}"/>
             <arg value="-c"/>
-            <arg value="${js.compiler} ${basedir}/di.js > ${basedir}/di.min.js"/>
+            <arg value="${js.compiler} ${basedir}/di-lite.js > ${basedir}/di-lite.min.js"/>
         </exec>
         <echo>Generating package.json</echo>
         <exec executable="bash">
