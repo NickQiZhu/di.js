@@ -1,6 +1,6 @@
 Backbone = require("backbone");
 
-require("../di");
+require("../di-lite");
 
 Profile = Backbone.Model.extend({
     id: "profile",

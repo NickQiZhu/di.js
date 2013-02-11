@@ -18,6 +18,17 @@ implementation - to provide dependencies injection at sub-modular level. di.js c
 light-weight alternative to RequireJs if your application is small enough.
 
 
+Install with npm
+--------------------
+npm install di-js
+
+
+Install without npm
+--------------------
+Download
+* [di.js](https://github.com/NickQiZhu/di.js)
+
+
 How to build di.js locally
 ---------------------------
 
