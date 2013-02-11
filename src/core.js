@@ -14,9 +14,18 @@
 di = {
     version: "0.1.0",
     createContext: function(){
-        return new di.Context();
-    }
-};
+        var ctx = {
+            map: {}
+        };
 
-di.Context = function(){
+        ctx.register = function(name, type){
+            ctx.map[name] = new type();
+        };
+
+        ctx.find = function(name){
+            return ctx.map[name];
+        };
+
+        return ctx;
+    }
 };

@@ -7,9 +7,18 @@ describe("common", function() {
 });
 
 describe("context", function(){
-    it("can be created", function(){
-        var ctx = di.createContext();
-        expect(ctx).isPrototypeOf(di.Context);
+    var ctx;
+
+    beforeEach(function(){
+       ctx = di.createContext();
     });
+
+    it("can register object by key", function(){
+        ctx.register("profile", Profile);
+        expect(ctx.find("profile") instanceof Profile).toBeTruthy();
+    });
+});
+
+describe("dependency resolution", function(){
 });
 
