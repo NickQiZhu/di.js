@@ -56,7 +56,6 @@ di = {
 
         entry.value = function (v) {
             if (!arguments.length) {
-                console.log(args);
                 if (value == null)
                     value = new type(args);
 

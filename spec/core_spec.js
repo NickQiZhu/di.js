@@ -51,10 +51,24 @@ describe("context", function () {
         expect(ctx.find(name) === ctx.find(name)).toBeTruthy();
     });
 
-    it("can support constructor arguments", function () {
+    it("can support constructor arguments in object literal", function () {
         expect(profile().attributes.name).toBe("Nick");
         expect(profile().attributes.job).toBe("Less");
     });
+
+    it("can support constructor arguments in single value", function () {
+        var name = "string";
+        ctx.register(name, String, "test");
+        ctx.initialize();
+        expect(ctx.find(name) == "test").toBeTruthy();
+    });
+
+    it("can support constructor arguments in single value", function () {
+            var name = "string";
+            ctx.register(name, String, "test");
+            ctx.initialize();
+            expect(ctx.find(name) == "test").toBeTruthy();
+        });
 
     describe("dependency resolution", function () {
         it("can resolve simple dependency", function () {
