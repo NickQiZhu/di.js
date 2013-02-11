@@ -23,7 +23,7 @@ describe("context", function () {
 
     beforeEach(function () {
         ctx = di.createContext();
-        ctx.register(profileName, Profile);
+        ctx.register(profileName, Profile, {name: "Nick", job: "Less"});
         ctx.register(addressName, Address);
         ctx.register(creditCardName, CreditCard);
         ctx.initialize();
@@ -49,6 +49,11 @@ describe("context", function () {
         ctx.register(name, String).strategy(di.strategy.singleton);
         ctx.initialize();
         expect(ctx.find(name) === ctx.find(name)).toBeTruthy();
+    });
+
+    it("can support constructor arguments", function () {
+        expect(profile().attributes.name).toBe("Nick");
+        expect(profile().attributes.job).toBe("Less");
     });
 
     describe("dependency resolution", function () {

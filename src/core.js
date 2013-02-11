@@ -18,8 +18,10 @@ di = {
             map: {}
         };
 
-        ctx.register = function (name, type) {
-            var entry = di.entry().type(type);
+        ctx.register = function (name, type, args) {
+            var entry = di.entry()
+                .type(type)
+                .args(args);
             ctx.map[name] = entry;
             return entry;
         };
@@ -50,14 +52,15 @@ di = {
         var type;
         var value;
         var strategy;
+        var args;
 
         entry.value = function (v) {
             if (!arguments.length) {
                 if (value == null)
-                    value = new type();
+                    value = new type(args);
 
-                if(strategy === di.strategy.proto)
-                    value = new type();
+                if (strategy === di.strategy.proto)
+                    value = new type(args);
 
                 return value;
             } else {
@@ -78,11 +81,19 @@ di = {
             return entry;
         };
 
+        entry.args = function (a) {
+            if (!arguments.length) return args;
+            args = a;
+            return entry;
+        };
+
         return entry;
     },
 
     strategy: {
-        proto: function () {},
-        singleton: function(){}
+        proto: function () {
+        },
+        singleton: function () {
+        }
     }
 };
