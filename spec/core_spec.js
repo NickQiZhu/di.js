@@ -10,12 +10,13 @@ describe("context", function () {
     var ctx;
     var profileName = "profile";
     var addressName = "address";
+    var creditCardName = "creditCard";
 
     beforeEach(function () {
         ctx = di.createContext();
         ctx.register(profileName, Profile);
         ctx.register(addressName, Address);
-        ctx.register("creditCard", CreditCard);
+        ctx.register(creditCardName, CreditCard);
         ctx.initialize();
     });
 
@@ -25,7 +26,12 @@ describe("context", function () {
 
     describe("dependency resolution", function () {
         it("can resolve simple dependency", function () {
-            expect(ctx.find(addressName).creditCard instanceof CreditCard).toBeTruthy();
+            expect(ctx.find(creditCardName).address instanceof Address).toBeTruthy();
+        });
+
+        it("can resolve composite dependencies", function () {
+            expect(ctx.find(profileName).address instanceof Address).toBeTruthy();
+            expect(ctx.find(profileName).creditCard instanceof CreditCard).toBeTruthy();
         });
     });
 });

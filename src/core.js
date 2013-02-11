@@ -13,26 +13,30 @@
  */
 di = {
     version: "0.1.0",
-    createContext: function(){
+    createContext: function () {
         var ctx = {
             map: {}
         };
 
-        ctx.register = function(name, type){
+        ctx.register = function (name, type) {
             ctx.map[name] = new type();
         };
 
-        ctx.find = function(name){
+        ctx.find = function (name) {
             return ctx.map[name];
         };
 
-        ctx.initialize = function(){
+        ctx.initialize = function () {
             var name;
-            for(name in ctx.map){
+            for (name in ctx.map) {
                 var o = ctx.find(name);
-                var dependencyName = o.dependencies;
-                var dependency = ctx.find(dependencyName);
-                o[dependencyName] = dependency;
+                if (o.dependencies) {
+                    var dependencyList = o.dependencies.split(" ");
+                    dependencyList.forEach(function (dependencyName) {
+                        var dependency = ctx.find(dependencyName);
+                        o[dependencyName] = dependency;
+                    });
+                }
             }
         };
 
