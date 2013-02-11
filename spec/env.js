@@ -22,8 +22,3 @@ CreditCard = Backbone.Model.extend({
     id: "credit_card",
     dependencies: "address"
 });
-
-Disposable = Backbone.Model.extend({
-    id: "disposable",
-    dependencies: "profile"
-});

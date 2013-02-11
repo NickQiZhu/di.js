@@ -82,7 +82,7 @@ di = {
     },
 
     strategy: {
-        proto: function () {
-        }
+        proto: function () {},
+        singleton: function(){}
     }
 };

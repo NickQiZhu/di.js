@@ -33,15 +33,22 @@ describe("context", function () {
         expect(profile() instanceof Profile).toBeTruthy();
     });
 
-    it("by default use singleton strategy", function(){
+    it("by default use singleton strategy", function () {
         expect(profile() === profile()).toBeTruthy();
     });
 
-    it("can support prototype strategy", function(){
+    it("can support prototype strategy", function () {
         var name = "disposable";
-        ctx.register(name, Disposable).strategy(di.strategy.proto);
+        ctx.register(name, String).strategy(di.strategy.proto);
         ctx.initialize();
         expect(ctx.find(name) != ctx.find(name)).toBeTruthy();
+    });
+
+    it("can support prototype strategy", function () {
+        var name = "singleton";
+        ctx.register(name, String).strategy(di.strategy.singleton);
+        ctx.initialize();
+        expect(ctx.find(name) === ctx.find(name)).toBeTruthy();
     });
 
     describe("dependency resolution", function () {
