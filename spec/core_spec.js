@@ -95,13 +95,22 @@ describe("context", function () {
         expect(ctx.find(name) == "test").toBeTruthy();
     });
 
-    it("can support function invocation wo/ args", function () {
+    it("can support function invocation w/ single arg", function () {
         var name = "func";
         ctx.register(name,function (s) {
             return new String(s);
         }, "test").factory(di.factory.func);
         ctx.initialize();
         expect(ctx.find(name) == "test").toBeTruthy();
+    });
+
+    it("can support function invocation w/ multiple args", function () {
+        var name = "func";
+        ctx.register(name,function (a, b) {
+            return new String(a + " " + b);
+        }, ["test", "me"]).factory(di.factory.func);
+        ctx.initialize();
+        expect(ctx.find(name) == "test me").toBeTruthy();
     });
 
     describe("dependency resolution", function () {

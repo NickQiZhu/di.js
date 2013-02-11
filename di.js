@@ -98,29 +98,36 @@ di = {
     },
 
     strategy: {
-        proto: function () {
-        },
-        singleton: function () {
-        }
+        proto: 1,
+        singleton: 2
     },
 
     factory: {
         constructor: function (type, args) {
             if (args instanceof Array) {
-                var exp = "new type(";
-                var i = 0;
-                for (; i < args.length; ++i)
-                    exp += "args[" + i + "],";
-                if (i > 0) exp = exp.slice(0, exp.length - 1);
-                exp += ")";
-                return eval(exp);
+                return eval(di.utils.invokeStmt(args, "new"));
             } else {
                 return new type(args);
             }
         },
 
-        func: function (func, args) {
-            return func(args);
+        func: function (type, args) {
+            if (args instanceof Array) {
+                return eval(di.utils.invokeStmt(args));
+            } else {
+                return type(args);
+            }
         }
     }
+};di.utils = {};
+
+di.utils.invokeStmt = function (args, op) {
+    var exp = op ? op : "";
+    exp += " type(";
+    var i = 0;
+    for (; i < args.length; ++i)
+        exp += "args[" + i + "],";
+    if (i > 0) exp = exp.slice(0, exp.length - 1);
+    exp += ")";
+    return exp;
 };
