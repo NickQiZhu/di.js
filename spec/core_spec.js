@@ -37,6 +37,13 @@ describe("context", function () {
         expect(profile() === profile()).toBeTruthy();
     });
 
+    it("can support prototype strategy", function(){
+        var name = "disposable";
+        ctx.register(name, Disposable).strategy(di.strategy.proto);
+        ctx.initialize();
+        expect(ctx.find(name) != ctx.find(name)).toBeTruthy();
+    });
+
     describe("dependency resolution", function () {
         it("can resolve simple dependency", function () {
             expect(creditCard().address instanceof Address).toBeTruthy();
@@ -50,8 +57,6 @@ describe("context", function () {
         it("dependencies are set to correct scope", function () {
             expect(profile().checkDependencies()).toBeTruthy();
         });
-
-
     });
 });
 

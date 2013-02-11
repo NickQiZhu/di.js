@@ -19,11 +19,13 @@ di = {
         };
 
         ctx.register = function (name, type) {
-            ctx.map[name] = new type();
+            var entry = di.entry().type(type);
+            ctx.map[name] = entry;
+            return entry;
         };
 
         ctx.find = function (name) {
-            return ctx.map[name];
+            return ctx.map[name].value();
         };
 
         ctx.initialize = function () {
@@ -41,5 +43,46 @@ di = {
         };
 
         return ctx;
+    },
+
+    entry: function () {
+        var entry = {};
+        var type;
+        var value;
+        var strategy;
+
+        entry.value = function (v) {
+            if (!arguments.length) {
+                if (value == null)
+                    value = new type();
+
+                if(strategy === di.strategy.proto)
+                    value = new type();
+
+                return value;
+            } else {
+                value = v;
+                return entry;
+            }
+        };
+
+        entry.strategy = function (s) {
+            if (!arguments.length) return strategy;
+            strategy = s;
+            return entry;
+        };
+
+        entry.type = function (t) {
+            if (!arguments.length) return type;
+            type = t;
+            return entry;
+        };
+
+        return entry;
+    },
+
+    strategy: {
+        proto: function () {
+        }
     }
 };
