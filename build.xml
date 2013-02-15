@@ -1,0 +1,43 @@
+<project name="di.js" default="make">
+    <property environment="env"/>
+    <property name="node.path" value="node_modules"/>
+    <property name="js.compiler" value="${node.path}/.bin/uglifyjs"/>
+    <property name="js.tester" value="${node.path}/.bin/jasmine-node"/>
+
+    <target name="init">
+        <echo>Building...</echo>
+    </target>
+
+    <target name="clean">
+        <delete file="di.js" />
+        <delete file="dc.min.js" />
+        <delete file="package.json" />
+    </target>
+
+    <target name="test" depends="make">
+        <echo>Executing test suites</echo>
+        <exec executable="${js.tester}" failonerror="yes">
+            <env key="NODE_PATH" value="${node.path}"/>
+            <arg value="--spec"/>
+        </exec>
+    </target>
+
+    <target name="make" depends="clean, init">
+        <echo>Compiling di.js</echo>
+        <concat destfile="di.js">
+            <file file="src/core.js"/>
+        </concat>
+        <echo>Compiling di.min.js</echo>
+        <exec executable="bash">
+            <env key="NODE_PATH" value="${node.path}"/>
+            <arg value="-c"/>
+            <arg value="${js.compiler} ${basedir}/di.js > ${basedir}/di.min.js"/>
+        </exec>
+        <echo>Generating package.json</echo>
+        <exec executable="bash">
+            <arg value="-c"/>
+            <arg value="node ${basedir}/src/package.js > ${basedir}/package.json"/>
+        </exec>
+    </target>
+
+</project>
