@@ -12,8 +12,9 @@ di.js is initially extracted from a Backbone.js based application. In this appli
 dependencies at module level. Each module could contain multiple views and models. We found using RequireJs to wire
 every individual view and model is a bit of overkill and verbose, however we still want the inversion of control to
 keep our code nicely isolated and testable. That's the reason behind the creation of this lightweight container
-implementation - to provide dependencies injection at sub-modular level. di.js can also be used standalone as a
-light-weight alternative to RequireJs if your application is small enough.
+implementation - to provide dependencies injection at sub-modular level.
+
+di.js can also be used standalone as a light-weight alternative to RequireJs if your application is small enough.
 
 
 How to build di.js locally
