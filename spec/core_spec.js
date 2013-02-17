@@ -134,17 +134,22 @@ describe("context", function () {
             validateProfileDependencies(profile());
         });
 
-        it("can resolve dependencies for prototype object", function(){
+        it("can resolve dependencies for prototype object", function () {
             var name = "obj";
             ctx.register(name, Profile).strategy(di.strategy.proto);
-            ctx.initialize();
             validateProfileDependencies(ctx.find(name));
         });
     });
 
     describe("lifecycle", function () {
-        it("should invoke ready after wiring", function () {
+        it("should invoke ready after wiring singleton object", function () {
             expect(profile().out).toBe("ready");
+        });
+
+        it("should invoke ready after wiring prototype object", function () {
+            var name = "obj";
+            ctx.register(name, Profile).strategy(di.strategy.proto);
+            expect(ctx.find(name).out).toBe("ready");
         });
     });
 });

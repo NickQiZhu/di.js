@@ -51,6 +51,8 @@ di = {
         ctx.ready = function (o) {
             if (typeof o.ready === 'function')
                 o.ready();
+
+            return o;
         }
 
         return ctx;
@@ -70,7 +72,7 @@ di = {
                     value = factory(type, args);
 
                 if (strategy === di.strategy.proto) {
-                    value = ctx.inject(factory(type, args));
+                    value = ctx.ready(ctx.inject(factory(type, args)));
                 }
 
                 return value;
