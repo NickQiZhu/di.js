@@ -48,7 +48,7 @@ di = {
         };
 
         function removeSpaces(s) {
-            while(s.indexOf(" ") >= 0) s = s.replace(" ", "")
+            while (s.indexOf(" ") >= 0) s = s.replace(" ", "")
             return s;
         }
 
@@ -58,24 +58,17 @@ di = {
 
                 depExpList.forEach(function (depExp) {
                     if (depExp) {
-                        var propertyName = depExp;
-                        var depName = depExp;
+                        var exp = di.dependencyExpression(depExp);
 
-                        if (depExp.indexOf("=") > 0) {
-                            var depExpParts = depExp.split("=");
-                            propertyName = depExpParts[0];
-                            depName = depExpParts[1];
-                        }
-
-                        var dep = ctx.get(depName);
+                        var dep = ctx.get(exp.name);
 
                         if (dep == null)
-                            throw "Dependency [" + name + "." + propertyName + "]->[" + depName + "] can not be satisfied";
+                            throw "Dependency [" + name + "." + exp.property + "]->[" + exp.name + "] can not be satisfied";
 
-                        if (o[propertyName] != null)
-                            throw "Dependency [" + name + "." + propertyName + "]->[" + depName + "] is overriding existing property";
+                        if (o[exp.property] != null)
+                            throw "Dependency [" + name + "." + exp.property + "]->[" + exp.name + "] is overriding existing property";
 
-                        o[propertyName] = dep;
+                        o[exp.property] = dep;
                     }
                 });
             }
@@ -91,6 +84,24 @@ di = {
         }
 
         return ctx;
+    },
+
+    dependencyExpression: function (depExp) {
+        var expression = {};
+
+        var property = depExp;
+        var name = depExp;
+
+        if (depExp.indexOf("=") > 0) {
+            var depExpParts = depExp.split("=");
+            property = depExpParts[0];
+            name = depExpParts[1];
+        }
+
+        expression.name = name;
+        expression.property = property;
+
+        return expression;
     },
 
     entry: function (name, ctx) {
