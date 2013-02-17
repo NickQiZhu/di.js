@@ -43,13 +43,23 @@ di = {
             }
         };
 
+        ctx.clear = function(){
+            this.map = {};
+        };
+
         ctx.inject = function (name, o) {
             if (o && o.dependencies) {
                 var dependencyList = o.dependencies.split(" ");
+
                 dependencyList.forEach(function (dependencyName) {
                     var dependency = ctx.get(dependencyName);
+
                     if(dependency == null)
                         throw "Dependency [" + name + "]->[" + dependencyName + "] can not be satisfied";
+
+                    if(o[dependencyName] != null)
+                        throw "Dependency [" + name + "]->[" + dependencyName + "] is overriding existing property";
+
                     o[dependencyName] = dependency;
                 });
             }

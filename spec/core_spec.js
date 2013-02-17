@@ -49,6 +49,8 @@ describe("context", function () {
     });
 
     it("can support prototype strategy", function () {
+        ctx.clear();
+
         var name = "disposable";
         ctx.register(name, String).strategy(di.strategy.proto);
         ctx.initialize();
@@ -56,6 +58,8 @@ describe("context", function () {
     });
 
     it("can support prototype strategy", function () {
+        ctx.clear();
+
         var name = "singleton";
         ctx.register(name, String).strategy(di.strategy.singleton);
         ctx.initialize();
@@ -68,6 +72,8 @@ describe("context", function () {
     });
 
     it("can support constructor arguments in single value", function () {
+        ctx.clear();
+
         var name = "string";
         ctx.register(name, String, "test");
         ctx.initialize();
@@ -75,6 +81,8 @@ describe("context", function () {
     });
 
     it("can support constructor arguments in single value", function () {
+        ctx.clear();
+
         var name = "string";
         ctx.register(name, String, "test");
         ctx.initialize();
@@ -87,6 +95,8 @@ describe("context", function () {
     });
 
     it("can support function invocation wo/ args", function () {
+        ctx.clear();
+
         var name = "func";
         ctx.register(name,function () {
             return "test"
@@ -96,6 +106,8 @@ describe("context", function () {
     });
 
     it("can support function invocation w/ single arg", function () {
+        ctx.clear();
+
         var name = "func";
         ctx.register(name,function (s) {
             return new String(s);
@@ -132,6 +144,8 @@ describe("context", function () {
         });
 
         it("can resolve cyclical dependencies", function () {
+            ctx.clear();
+
             ctx.register("a",function () {
                 return {dependencies: "b"};
             }).factory(di.factory.func);
@@ -148,6 +162,8 @@ describe("context", function () {
         });
 
         it("will report error if dependency are not fully satisfied", function () {
+            ctx.clear();
+
             ctx.register("a",function () {
                 return {dependencies: "b"};
             }).factory(di.factory.func);
@@ -156,6 +172,25 @@ describe("context", function () {
                 ctx.initialize();
             } catch (err) {
                 expect(err).toBe("Dependency [a]->[b] can not be satisfied");
+            }
+        });
+
+        it("will report error if dependency wiring is overriding existing property", function () {
+            ctx.clear();
+
+            ctx.register("a",function () {
+                return {dependencies: "b", b: {}};
+            }).factory(di.factory.func);
+
+            ctx.register("b",function () {
+                return {};
+            }).factory(di.factory.func);
+
+            try {
+                ctx.initialize();
+                expect.fail();
+            } catch (err) {
+                expect(err).toBe("Dependency [a]->[b] is overriding existing property");
             }
         });
     });
