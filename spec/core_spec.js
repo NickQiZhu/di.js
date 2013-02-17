@@ -143,71 +143,85 @@ describe("context", function () {
             validateProfileDependencies(ctx.get(name));
         });
 
-        it("can resolve cyclical dependencies", function () {
-            ctx.clear();
+        describe("fine grain dependency wiring", function () {
+            beforeEach(function () {
+                ctx.clear();
+            });
 
-            ctx.register("a",function () {
-                return {dependencies: "b"};
-            }).factory(di.factory.func);
-            ctx.register("b",function () {
-                return {dependencies: "a"};
-            }).factory(di.factory.func);
+            it("can resolve cyclical dependencies", function () {
+                ctx.register("a",function () {
+                    return {dependencies: "b"};
+                }).factory(di.factory.func);
+                ctx.register("b",function () {
+                    return {dependencies: "a"};
+                }).factory(di.factory.func);
 
-            ctx.initialize();
-
-            expect(ctx.get("a").b === ctx.get("b")).toBeTruthy();
-            expect(ctx.get("b").a === ctx.get("a")).toBeTruthy();
-            expect(ctx.get("a").b.a === ctx.get("a")).toBeTruthy();
-            expect(ctx.get("b").a.b === ctx.get("b")).toBeTruthy();
-        });
-
-        it("can resolve dependencies with assignment", function () {
-            ctx.clear();
-
-            ctx.register("a",function () {
-                return {dependencies: " bee = b ,be=b "};
-            }).factory(di.factory.func);
-            ctx.register("b",function () {
-                return {};
-            }).factory(di.factory.func);
-
-            ctx.initialize();
-
-            expect(ctx.get("a").bee === ctx.get("b")).toBeTruthy();
-            expect(ctx.get("a").be === ctx.get("b")).toBeTruthy();
-        });
-
-        it("will report error if dependency are not fully satisfied", function () {
-            ctx.clear();
-
-            ctx.register("a",function () {
-                return {dependencies: "b"};
-            }).factory(di.factory.func);
-
-            try {
                 ctx.initialize();
-            } catch (err) {
-                expect(err).toBe("Dependency [a.b]->[b] can not be satisfied");
-            }
-        });
 
-        it("will report error if dependency wiring is overriding existing property", function () {
-            ctx.clear();
+                expect(ctx.get("a").b === ctx.get("b")).toBeTruthy();
+                expect(ctx.get("b").a === ctx.get("a")).toBeTruthy();
+                expect(ctx.get("a").b.a === ctx.get("a")).toBeTruthy();
+                expect(ctx.get("b").a.b === ctx.get("b")).toBeTruthy();
+            });
 
-            ctx.register("a",function () {
-                return {dependencies: "b", b: {}};
-            }).factory(di.factory.func);
+            it("can resolve dependencies with assignment", function () {
+                ctx.register("a",function () {
+                    return {dependencies: " bee = b ,be=b "};
+                }).factory(di.factory.func);
+                ctx.register("b",function () {
+                    return {};
+                }).factory(di.factory.func);
 
-            ctx.register("b",function () {
-                return {};
-            }).factory(di.factory.func);
-
-            try {
                 ctx.initialize();
-                expect.fail();
-            } catch (err) {
-                expect(err).toBe("Dependency [a.b]->[b] is overriding existing property");
-            }
+
+                expect(ctx.get("a").bee === ctx.get("b")).toBeTruthy();
+                expect(ctx.get("a").be === ctx.get("b")).toBeTruthy();
+            });
+
+            it("should ignore empty dependencies", function () {
+                ctx.register("a",function () {
+                    return {dependencies: " "};
+                }).factory(di.factory.func);
+
+                ctx.initialize();
+            });
+
+            it("should ignore null dependencies", function () {
+                ctx.register("a",function () {
+                    return {dependencies: null};
+                }).factory(di.factory.func);
+
+                ctx.initialize();
+            });
+
+            it("will report error if dependency are not fully satisfied", function () {
+                ctx.register("a",function () {
+                    return {dependencies: "b"};
+                }).factory(di.factory.func);
+
+                try {
+                    ctx.initialize();
+                } catch (err) {
+                    expect(err).toBe("Dependency [a.b]->[b] can not be satisfied");
+                }
+            });
+
+            it("will report error if dependency wiring is overriding existing property", function () {
+                ctx.register("a",function () {
+                    return {dependencies: "b", b: {}};
+                }).factory(di.factory.func);
+
+                ctx.register("b",function () {
+                    return {};
+                }).factory(di.factory.func);
+
+                try {
+                    ctx.initialize();
+                    expect.fail();
+                } catch (err) {
+                    expect(err).toBe("Dependency [a.b]->[b] is overriding existing property");
+                }
+            });
         });
     });
 
