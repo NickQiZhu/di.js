@@ -27,7 +27,7 @@ di = {
         };
 
         ctx.get = function (name) {
-            return ctx.map[name].value();
+            return ctx.map[name].object();
         };
 
         ctx.initialize = function () {
@@ -61,23 +61,23 @@ di = {
     entry: function (ctx) {
         var entry = {};
         var type;
-        var value;
+        var object;
         var strategy;
         var args;
         var factory = di.factory.constructor;
 
-        entry.value = function (v) {
+        entry.object = function (v) {
             if (!arguments.length) {
-                if (!value)
-                    value = factory(type, args);
+                if (!object)
+                    object = factory(type, args);
 
                 if (strategy === di.strategy.proto) {
-                    value = ctx.ready(ctx.inject(factory(type, args)));
+                    object = ctx.ready(ctx.inject(factory(type, args)));
                 }
 
-                return value;
+                return object;
             } else {
-                value = v;
+                object = v;
                 return entry;
             }
         };
