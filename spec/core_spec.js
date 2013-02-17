@@ -114,22 +114,36 @@ describe("context", function () {
     });
 
     describe("dependency resolution", function () {
+
+        function validateProfileDependencies(profile) {
+            expect(profile.address instanceof Address).toBeTruthy();
+            expect(profile.creditCard instanceof CreditCard).toBeTruthy();
+            expect(profile.checkDependencies()).toBeTruthy();
+            validateCreditCardDependencies(profile.creditCard);
+        }
+
+        function validateCreditCardDependencies(card) {
+            expect(card.address instanceof Address).toBeTruthy();
+        }
+
         it("can resolve simple dependency", function () {
-            expect(creditCard().address instanceof Address).toBeTruthy();
+            validateCreditCardDependencies(creditCard());
         });
 
         it("can resolve composite dependencies", function () {
-            expect(profile().address instanceof Address).toBeTruthy();
-            expect(profile().creditCard instanceof CreditCard).toBeTruthy();
+            validateProfileDependencies(profile());
         });
 
-        it("dependencies are set to correct scope", function () {
-            expect(profile().checkDependencies()).toBeTruthy();
+        it("can resolve dependencies for prototype object", function(){
+            var name = "obj";
+            ctx.register(name, Profile).strategy(di.strategy.proto);
+            ctx.initialize();
+            validateProfileDependencies(ctx.find(name));
         });
     });
 
-    describe("lifecycle", function(){
-        it("should invoke ready after wiring", function(){
+    describe("lifecycle", function () {
+        it("should invoke ready after wiring", function () {
             expect(profile().out).toBe("ready");
         });
     });

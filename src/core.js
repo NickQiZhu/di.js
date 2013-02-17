@@ -19,7 +19,7 @@ di = {
         };
 
         ctx.register = function (name, type, args) {
-            var entry = di.entry()
+            var entry = di.entry(ctx)
                 .type(type)
                 .args(args);
             ctx.map[name] = entry;
@@ -32,11 +32,11 @@ di = {
 
         ctx.initialize = function () {
             for (var name in ctx.map) {
-                ready(inject(ctx.find(name)));
+                ctx.ready(ctx.inject(ctx.find(name)));
             }
         };
 
-        function inject(o) {
+        ctx.inject = function (o) {
             if (o && o.dependencies) {
                 var dependencyList = o.dependencies.split(" ");
                 dependencyList.forEach(function (dependencyName) {
@@ -48,7 +48,7 @@ di = {
             return o;
         }
 
-        function ready(o) {
+        ctx.ready = function (o) {
             if (typeof o.ready === 'function')
                 o.ready();
         }
@@ -56,7 +56,7 @@ di = {
         return ctx;
     },
 
-    entry: function () {
+    entry: function (ctx) {
         var entry = {};
         var type;
         var value;
@@ -69,8 +69,9 @@ di = {
                 if (!value)
                     value = factory(type, args);
 
-                if (strategy === di.strategy.proto)
-                    value = factory(type, args);
+                if (strategy === di.strategy.proto) {
+                    value = ctx.inject(factory(type, args));
+                }
 
                 return value;
             } else {
