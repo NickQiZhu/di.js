@@ -104,22 +104,6 @@ describe("context", function () {
         expect(ctx.get(name) == "test").toBeTruthy();
     });
 
-    it("can support function invocation w/ multiple args", function () {
-        ctx.register("a",function () {
-            return {dependencies: "b"};
-        }).factory(di.factory.func);
-        ctx.register("b",function () {
-            return {dependencies: "a"};
-        }).factory(di.factory.func);
-
-        ctx.initialize();
-
-        expect(ctx.get("a").b === ctx.get("b")).toBeTruthy();
-        expect(ctx.get("b").a === ctx.get("a")).toBeTruthy();
-        expect(ctx.get("a").b.a === ctx.get("a")).toBeTruthy();
-        expect(ctx.get("b").a.b === ctx.get("b")).toBeTruthy();
-    });
-
     describe("dependency resolution", function () {
 
         function validateProfileDependencies(profile) {
@@ -148,7 +132,31 @@ describe("context", function () {
         });
 
         it("can resolve cyclical dependencies", function () {
+            ctx.register("a",function () {
+                return {dependencies: "b"};
+            }).factory(di.factory.func);
+            ctx.register("b",function () {
+                return {dependencies: "a"};
+            }).factory(di.factory.func);
 
+            ctx.initialize();
+
+            expect(ctx.get("a").b === ctx.get("b")).toBeTruthy();
+            expect(ctx.get("b").a === ctx.get("a")).toBeTruthy();
+            expect(ctx.get("a").b.a === ctx.get("a")).toBeTruthy();
+            expect(ctx.get("b").a.b === ctx.get("b")).toBeTruthy();
+        });
+
+        it("will report error if dependency are not fully satisfied", function () {
+            ctx.register("a",function () {
+                return {dependencies: "b"};
+            }).factory(di.factory.func);
+
+            try {
+                ctx.initialize();
+            } catch (err) {
+                expect(err).toBe("Dependency [a]->[b] can not be satisfied");
+            }
         });
     });
 

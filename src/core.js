@@ -19,28 +19,37 @@ di = {
         };
 
         ctx.register = function (name, type, args) {
-            var entry = di.entry(ctx)
+            var entry = di.entry(name, ctx)
                 .type(type)
                 .args(args);
             ctx.map[name] = entry;
             return entry;
         };
 
+        ctx.has = function(name) {
+            return ctx.map[name] != null;
+        }
+
         ctx.get = function (name) {
-            return ctx.map[name].object();
+            if(ctx.has(name))
+                return ctx.map[name].object();
+            else
+                return null;
         };
 
         ctx.initialize = function () {
             for (var name in ctx.map) {
-                ctx.ready(ctx.inject(ctx.get(name)));
+                ctx.ready(ctx.inject(name, ctx.get(name)));
             }
         };
 
-        ctx.inject = function (o) {
+        ctx.inject = function (name, o) {
             if (o && o.dependencies) {
                 var dependencyList = o.dependencies.split(" ");
                 dependencyList.forEach(function (dependencyName) {
                     var dependency = ctx.get(dependencyName);
+                    if(dependency == null)
+                        throw "Dependency [" + name + "]->[" + dependencyName + "] can not be satisfied";
                     o[dependencyName] = dependency;
                 });
             }
@@ -58,8 +67,9 @@ di = {
         return ctx;
     },
 
-    entry: function (ctx) {
+    entry: function (name, ctx) {
         var entry = {};
+        var name;
         var type;
         var object;
         var strategy = di.strategy.singleton;
@@ -68,7 +78,7 @@ di = {
 
         entry.object = function (o) {
             if (!arguments.length) {
-                object = strategy(object, factory, type, args, ctx);
+                object = strategy(name, object, factory, type, args, ctx);
                 return object;
             } else {
                 object = o;
@@ -104,10 +114,10 @@ di = {
     },
 
     strategy: {
-        proto:  function(object, factory, type, args, ctx){
-            return ctx.ready(ctx.inject(factory(type, args)));
+        proto:  function(name, object, factory, type, args, ctx){
+            return ctx.ready(ctx.inject(name, factory(type, args)));
         },
-        singleton: function(object, factory, type, args, ctx){
+        singleton: function(name, object, factory, type, args, ctx){
             if (!object)
                 object = factory(type, args);
 
