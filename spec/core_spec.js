@@ -105,12 +105,19 @@ describe("context", function () {
     });
 
     it("can support function invocation w/ multiple args", function () {
-        var name = "func";
-        ctx.register(name,function (a, b) {
-            return new String(a + " " + b);
-        }, ["test", "me"]).factory(di.factory.func);
+        ctx.register("a",function () {
+            return {dependencies: "b"};
+        }).factory(di.factory.func);
+        ctx.register("b",function () {
+            return {dependencies: "a"};
+        }).factory(di.factory.func);
+
         ctx.initialize();
-        expect(ctx.get(name) == "test me").toBeTruthy();
+
+        expect(ctx.get("a").b === ctx.get("b")).toBeTruthy();
+        expect(ctx.get("b").a === ctx.get("a")).toBeTruthy();
+        expect(ctx.get("a").b.a === ctx.get("a")).toBeTruthy();
+        expect(ctx.get("b").a.b === ctx.get("b")).toBeTruthy();
     });
 
     describe("dependency resolution", function () {
@@ -138,6 +145,10 @@ describe("context", function () {
             var name = "obj";
             ctx.register(name, Profile).strategy(di.strategy.proto);
             validateProfileDependencies(ctx.get(name));
+        });
+
+        it("can resolve cyclical dependencies", function () {
+
         });
     });
 

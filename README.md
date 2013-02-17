@@ -29,8 +29,8 @@ Install without npm
 Download
 * [di-lite](https://github.com/NickQiZhu/di.js)
 
-Guide
------
+How-to Guide
+------------
 
 ### Basic Wiring
 
@@ -54,6 +54,9 @@ var ctx = di.createContext();
 ctx.register("a", A);
 ctx.register("b", B);
 ctx.register("c", C);
+
+// initialize di container so all singleton(default) objects will be wired at this stage
+ctx.initialize();
 
 var instanceOfA = ctx.get("a");
 instaceOfA.b === ctx.get("b"); // true
@@ -89,6 +92,58 @@ You can pass arguments to constructor function by using the additional parameter
 ctx.register("str", String, "hello world"); // signle simple argument
 ctx.register("profileView", ProfileView, {el: "#profile_div"}); // signle object literal argument
 ctx.register("array", Array, ["Saab","Volvo","BMW"]); // multiple argument is passed in using an array
+```
+
+### Cyclical Dependency
+
+di.js container supports solution of cyclical dependencies, so the following dependency relationship is valid.
+
+```js
+var A = function(){
+    ...
+    this.dependencies = "b";
+    ...
+};
+var B = function(){
+    ...
+    this.dependencies = "a";
+    ...
+};
+
+ctx.register("a", A);
+ctx.register("b", B);
+
+ctx.initialize();
+
+ctx.get("a").b === ctx.get("b"); // true
+ctx.get("b").a === ctx.get("a"); // true
+ctx.get("a").b.a === ctx.get("a"); // true
+ctx.get("b").a.b === ctx.get("b"); // true
+```
+
+### Functional Object
+
+What if your are using functional object pattern and do not have a constructor function for your object? di.js fully
+supports functional object pattern since we believe this is the best way to create javascript object anyway.
+
+```js
+var FuncObject = function(spec){
+    var that = {};
+    ...
+    return that;
+};
+
+ctx.register("funcObjSingleton", FuncObject, spec).factory(di.factory.func);
+
+// function chaining can be used to customize your object registration
+ctx.register("funcObjProto", FuncObject, spec)
+    .strategy(di.strategy.proto)
+    .factory(di.factory.func);
+
+ctx.initialize();
+
+ctx.get("funcObjSingleton"); // will return you a signleton instance of FuncObject
+ctx.get("funcObjProto"); // will return you a new instance of FuncObject each time
 ```
 
 How to build di-lite locally

@@ -66,12 +66,12 @@ di = {
         var args;
         var factory = di.factory.constructor;
 
-        entry.object = function (v) {
+        entry.object = function (o) {
             if (!arguments.length) {
                 object = strategy(object, factory, type, args, ctx);
                 return object;
             } else {
-                object = v;
+                object = o;
                 return entry;
             }
         };
