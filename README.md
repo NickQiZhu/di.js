@@ -16,7 +16,8 @@ every individual view and model is a bit of overkill and verbose, however we sti
 keep our code nicely isolated and testable. That's the reason behind the creation of this lightweight container
 implementation - to provide dependencies injection at sub-modular level.
 
-di-lite can also be used standalone as a light-weight alternative to RequireJs if your application is small enough.
+That being said di-lite is designed to be used standalone there is no dependency on Backbone or RequireJs. Its a fully
+funcitonal dependency injection container by itself. It is extremely lightweight and works well both in browser or node.
 
 
 Install with npm
