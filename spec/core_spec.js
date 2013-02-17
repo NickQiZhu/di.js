@@ -161,6 +161,22 @@ describe("context", function () {
             expect(ctx.get("b").a.b === ctx.get("b")).toBeTruthy();
         });
 
+        it("can resolve dependencies with assignment", function () {
+            ctx.clear();
+
+            ctx.register("a",function () {
+                return {dependencies: " bee = b ,be=b "};
+            }).factory(di.factory.func);
+            ctx.register("b",function () {
+                return {};
+            }).factory(di.factory.func);
+
+            ctx.initialize();
+
+            expect(ctx.get("a").bee === ctx.get("b")).toBeTruthy();
+            expect(ctx.get("a").be === ctx.get("b")).toBeTruthy();
+        });
+
         it("will report error if dependency are not fully satisfied", function () {
             ctx.clear();
 
@@ -171,7 +187,7 @@ describe("context", function () {
             try {
                 ctx.initialize();
             } catch (err) {
-                expect(err).toBe("Dependency [a.b]->[b=b] can not be satisfied");
+                expect(err).toBe("Dependency [a.b]->[b] can not be satisfied");
             }
         });
 
@@ -190,7 +206,7 @@ describe("context", function () {
                 ctx.initialize();
                 expect.fail();
             } catch (err) {
-                expect(err).toBe("Dependency [a.b]->[b=b] is overriding existing property");
+                expect(err).toBe("Dependency [a.b]->[b] is overriding existing property");
             }
         });
     });

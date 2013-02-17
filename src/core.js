@@ -47,34 +47,33 @@ di = {
             this.map = {};
         };
 
-        function trim(s) {
-            return s.replace(" ", "");
+        function removeSpaces(s) {
+            while(s.indexOf(" ") >= 0) s = s.replace(" ", "")
+            return s;
         }
 
         ctx.inject = function (name, o) {
             if (o && o.dependencies) {
-                var depExpList = o.dependencies.split(",");
+                var depExpList = removeSpaces(o.dependencies).split(",");
 
                 depExpList.forEach(function (depExp) {
                     if (depExp) {
-                        depExp = trim(depExp);
-
                         var propertyName = depExp;
                         var depName = depExp;
 
                         if (depExp.indexOf("=") > 0) {
                             var depExpParts = depExp.split("=");
-                            propertyName = trim(depExpParts[0]);
-                            depName = trim(depExpParts[1]);
+                            propertyName = depExpParts[0];
+                            depName = depExpParts[1];
                         }
 
                         var dep = ctx.get(depName);
 
                         if (dep == null)
-                            throw "Dependency [" + name + "." + propertyName + "]->[" + propertyName + "=" + depName + "] can not be satisfied";
+                            throw "Dependency [" + name + "." + propertyName + "]->[" + depName + "] can not be satisfied";
 
                         if (o[propertyName] != null)
-                            throw "Dependency [" + name + "." + propertyName + "]->[" + propertyName + "=" + depName + "] is overriding existing property";
+                            throw "Dependency [" + name + "." + propertyName + "]->[" + depName + "] is overriding existing property";
 
                         o[propertyName] = dep;
                     }
