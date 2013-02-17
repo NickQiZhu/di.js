@@ -37,7 +37,7 @@ How-to Guide
 ```js
 var A = function(){
     ...
-    this.dependencies = "b c";
+    this.dependencies = "b, c";
     ...
 };
 var B = function(){
@@ -64,6 +64,24 @@ instaceOfA.c === ctx.get("c"); // true
 
 var instanceOfB = ctx.get("b");
 instanceOfB.c === ctx.get("c"); // true
+```
+### Wiring with Assignment
+By default dependencies are wired using their registered name respectively, however you can override this behavior by
+including an explicit assignment in dependency definition. You can also mix both explicit and implicit assignment in
+dependency definition.
+
+```js
+var A = function(){
+    ...
+    this.dependencies = "bee=b, c"; // mix explicit and implicit assignment
+    ...
+};
+
+ctx.initialize();
+
+var instanceOfA = ctx.get("a");
+instaceOfA.bee === ctx.get("b"); // true - explicit assignment
+instaceOfA.c === ctx.get("c"); // true - implicit assignment
 ```
 
 ### Singleton By Default
@@ -154,7 +172,7 @@ then the callback will be executed once all dependencies are satisfied.
 ```js
 var MyView = Backbone.View.extend({
     ...
-    dependencies: "otherView myModel",
+    dependencies: "otherView, myModel",
     ready: function(){this.render();} // called once all dependencies are satisfied
     ...
 });
