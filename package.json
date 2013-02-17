@@ -1,6 +1,6 @@
 {
   "name": "di-lite",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A ultra light-weight dependency injection container in Javascript ",
   "keywords": [
     "di",
