@@ -12,7 +12,7 @@
  *  limitations under the License.
  */
 di = {
-    version: "0.1.1",
+    version: "0.2.0",
     createContext: function () {
         var ctx = {
             map: {}
@@ -26,13 +26,13 @@ di = {
             return entry;
         };
 
-        ctx.find = function (name) {
+        ctx.get = function (name) {
             return ctx.map[name].value();
         };
 
         ctx.initialize = function () {
             for (var name in ctx.map) {
-                ctx.ready(ctx.inject(ctx.find(name)));
+                ctx.ready(ctx.inject(ctx.get(name)));
             }
         };
 
@@ -40,7 +40,7 @@ di = {
             if (o && o.dependencies) {
                 var dependencyList = o.dependencies.split(" ");
                 dependencyList.forEach(function (dependencyName) {
-                    var dependency = ctx.find(dependencyName);
+                    var dependency = ctx.get(dependencyName);
                     o[dependencyName] = dependency;
                 });
             }

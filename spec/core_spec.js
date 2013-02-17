@@ -17,15 +17,15 @@ describe("context", function () {
     };
 
     function profile() {
-        return ctx.find(profileName);
+        return ctx.get(profileName);
     }
 
     function creditCard() {
-        return ctx.find(creditCardName);
+        return ctx.get(creditCardName);
     }
 
     function profileCollection() {
-        return ctx.find(profileCollectionName);
+        return ctx.get(profileCollectionName);
     }
 
     beforeEach(function () {
@@ -52,14 +52,14 @@ describe("context", function () {
         var name = "disposable";
         ctx.register(name, String).strategy(di.strategy.proto);
         ctx.initialize();
-        expect(ctx.find(name) != ctx.find(name)).toBeTruthy();
+        expect(ctx.get(name) != ctx.get(name)).toBeTruthy();
     });
 
     it("can support prototype strategy", function () {
         var name = "singleton";
         ctx.register(name, String).strategy(di.strategy.singleton);
         ctx.initialize();
-        expect(ctx.find(name) === ctx.find(name)).toBeTruthy();
+        expect(ctx.get(name) === ctx.get(name)).toBeTruthy();
     });
 
     it("can support constructor arguments in object literal", function () {
@@ -71,14 +71,14 @@ describe("context", function () {
         var name = "string";
         ctx.register(name, String, "test");
         ctx.initialize();
-        expect(ctx.find(name) == "test").toBeTruthy();
+        expect(ctx.get(name) == "test").toBeTruthy();
     });
 
     it("can support constructor arguments in single value", function () {
         var name = "string";
         ctx.register(name, String, "test");
         ctx.initialize();
-        expect(ctx.find(name) == "test").toBeTruthy();
+        expect(ctx.get(name) == "test").toBeTruthy();
     });
 
     it("can support constructor arguments in array", function () {
@@ -92,7 +92,7 @@ describe("context", function () {
             return "test"
         }).factory(di.factory.func);
         ctx.initialize();
-        expect(ctx.find(name) == "test").toBeTruthy();
+        expect(ctx.get(name) == "test").toBeTruthy();
     });
 
     it("can support function invocation w/ single arg", function () {
@@ -101,7 +101,7 @@ describe("context", function () {
             return new String(s);
         }, "test").factory(di.factory.func);
         ctx.initialize();
-        expect(ctx.find(name) == "test").toBeTruthy();
+        expect(ctx.get(name) == "test").toBeTruthy();
     });
 
     it("can support function invocation w/ multiple args", function () {
@@ -110,7 +110,7 @@ describe("context", function () {
             return new String(a + " " + b);
         }, ["test", "me"]).factory(di.factory.func);
         ctx.initialize();
-        expect(ctx.find(name) == "test me").toBeTruthy();
+        expect(ctx.get(name) == "test me").toBeTruthy();
     });
 
     describe("dependency resolution", function () {
@@ -137,7 +137,7 @@ describe("context", function () {
         it("can resolve dependencies for prototype object", function () {
             var name = "obj";
             ctx.register(name, Profile).strategy(di.strategy.proto);
-            validateProfileDependencies(ctx.find(name));
+            validateProfileDependencies(ctx.get(name));
         });
     });
 
@@ -149,7 +149,7 @@ describe("context", function () {
         it("should invoke ready after wiring prototype object", function () {
             var name = "obj";
             ctx.register(name, Profile).strategy(di.strategy.proto);
-            expect(ctx.find(name).out).toBe("ready");
+            expect(ctx.get(name).out).toBe("ready");
         });
     });
 });
