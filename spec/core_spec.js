@@ -120,9 +120,9 @@ describe("context", function () {
 
         function validateProfileDependencies(profile) {
             expect(profile.address instanceof Address).toBeTruthy();
-            expect(profile.creditCard instanceof CreditCard).toBeTruthy();
+            expect(profile.personalCreditCard instanceof CreditCard).toBeTruthy();
             expect(profile.checkDependencies()).toBeTruthy();
-            validateCreditCardDependencies(profile.creditCard);
+            validateCreditCardDependencies(profile.personalCreditCard);
         }
 
         function validateCreditCardDependencies(card) {
@@ -171,7 +171,7 @@ describe("context", function () {
             try {
                 ctx.initialize();
             } catch (err) {
-                expect(err).toBe("Dependency [a]->[b] can not be satisfied");
+                expect(err).toBe("Dependency [a.b]->[b=b] can not be satisfied");
             }
         });
 
@@ -190,7 +190,7 @@ describe("context", function () {
                 ctx.initialize();
                 expect.fail();
             } catch (err) {
-                expect(err).toBe("Dependency [a]->[b] is overriding existing property");
+                expect(err).toBe("Dependency [a.b]->[b=b] is overriding existing property");
             }
         });
     });

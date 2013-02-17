@@ -4,9 +4,9 @@ require("../di-lite");
 
 Profile = Backbone.Model.extend({
     id: "profile",
-    dependencies: "address creditCard",
+    dependencies: "address, personalCreditCard=creditCard",
     checkDependencies: function(){
-        if(this.address != null && this.creditCard != null)
+        if(this.address != null && this.personalCreditCard != null)
             return true;
 
         return false;

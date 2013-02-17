@@ -26,12 +26,12 @@ di = {
             return entry;
         };
 
-        ctx.has = function(name) {
+        ctx.has = function (name) {
             return ctx.map[name] != null;
         }
 
         ctx.get = function (name) {
-            if(ctx.has(name))
+            if (ctx.has(name))
                 return ctx.map[name].object();
             else
                 return null;
@@ -43,24 +43,41 @@ di = {
             }
         };
 
-        ctx.clear = function(){
+        ctx.clear = function () {
             this.map = {};
         };
 
+        function trim(s) {
+            return s.replace(" ", "");
+        }
+
         ctx.inject = function (name, o) {
             if (o && o.dependencies) {
-                var dependencyList = o.dependencies.split(" ");
+                var depExpList = o.dependencies.split(",");
 
-                dependencyList.forEach(function (dependencyName) {
-                    var dependency = ctx.get(dependencyName);
+                depExpList.forEach(function (depExp) {
+                    if (depExp) {
+                        depExp = trim(depExp);
 
-                    if(dependency == null)
-                        throw "Dependency [" + name + "]->[" + dependencyName + "] can not be satisfied";
+                        var propertyName = depExp;
+                        var depName = depExp;
 
-                    if(o[dependencyName] != null)
-                        throw "Dependency [" + name + "]->[" + dependencyName + "] is overriding existing property";
+                        if (depExp.indexOf("=") > 0) {
+                            var depExpParts = depExp.split("=");
+                            propertyName = trim(depExpParts[0]);
+                            depName = trim(depExpParts[1]);
+                        }
 
-                    o[dependencyName] = dependency;
+                        var dep = ctx.get(depName);
+
+                        if (dep == null)
+                            throw "Dependency [" + name + "." + propertyName + "]->[" + propertyName + "=" + depName + "] can not be satisfied";
+
+                        if (o[propertyName] != null)
+                            throw "Dependency [" + name + "." + propertyName + "]->[" + propertyName + "=" + depName + "] is overriding existing property";
+
+                        o[propertyName] = dep;
+                    }
                 });
             }
 
@@ -124,10 +141,10 @@ di = {
     },
 
     strategy: {
-        proto:  function(name, object, factory, type, args, ctx){
+        proto: function (name, object, factory, type, args, ctx) {
             return ctx.ready(ctx.inject(name, factory(type, args)));
         },
-        singleton: function(name, object, factory, type, args, ctx){
+        singleton: function (name, object, factory, type, args, ctx) {
             if (!object)
                 object = factory(type, args);
 
