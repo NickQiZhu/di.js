@@ -62,19 +62,13 @@ di = {
         var entry = {};
         var type;
         var object;
-        var strategy;
+        var strategy = di.strategy.singleton;
         var args;
         var factory = di.factory.constructor;
 
         entry.object = function (v) {
             if (!arguments.length) {
-                if (!object)
-                    object = factory(type, args);
-
-                if (strategy === di.strategy.proto) {
-                    object = ctx.ready(ctx.inject(factory(type, args)));
-                }
-
+                object = strategy(object, factory, type, args, ctx);
                 return object;
             } else {
                 object = v;
@@ -110,8 +104,15 @@ di = {
     },
 
     strategy: {
-        proto: 1,
-        singleton: 2
+        proto:  function(object, factory, type, args, ctx){
+            return ctx.ready(ctx.inject(factory(type, args)));
+        },
+        singleton: function(object, factory, type, args, ctx){
+            if (!object)
+                object = factory(type, args);
+
+            return object;
+        }
     },
 
     factory: {
