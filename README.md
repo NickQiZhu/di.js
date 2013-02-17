@@ -68,7 +68,7 @@ instanceOfB.c === ctx.get("c"); // true
 
 ### Singleton By Default
 
-All objects created and managed by di.js container are by default singleton.
+All objects created and managed by di-lite.js container are by default singleton.
 
 ```js
 ctx.get("a") === ctx.get("a"); // true
@@ -96,7 +96,7 @@ ctx.register("array", Array, ["Saab","Volvo","BMW"]); // multiple argument is pa
 
 ### Cyclical Dependency
 
-di.js container supports solution of cyclical dependencies, so the following dependency relationship is valid.
+di-lite.js container supports solution of cyclical dependencies, so the following dependency relationship is valid.
 
 ```js
 var A = function(){
@@ -123,7 +123,7 @@ ctx.get("b").a.b === ctx.get("b"); // true
 
 ### Functional Object
 
-What if your are using functional object pattern and do not have a constructor function for your object? di.js fully
+What if your are using functional object pattern and do not have a constructor function for your object? di-lite.js fully
 supports functional object pattern since we believe this is the best way to create javascript object anyway.
 
 ```js
@@ -144,6 +144,20 @@ ctx.initialize();
 
 ctx.get("funcObjSingleton"); // will return you a signleton instance of FuncObject
 ctx.get("funcObjProto"); // will return you a new instance of FuncObject each time
+```
+
+### Lifecycle Hook
+
+di-lite container provides a lifecycle hook callback ```ready``` if the wired object provide a ```ready``` function
+then the callback will be executed once all dependencies are satisfied.
+
+```js
+var MyView = Backbone.View.extend({
+    ...
+    dependencies: "otherView myModel",
+    ready: function(){this.render();} // called once all dependencies are satisfied
+    ...
+});
 ```
 
 How to build di-lite locally
