@@ -35,14 +35,14 @@ How-to Guide
 
 * [Basic Wiring](#basic-wiring)
 * [Wiring with Assignment](#wiring-with-assignment)
-* [Passive Dependency Resolution](#passive_dependency_resolution)
-* [Singleton By Default](#singleton_by_default)
-* [Prototype Strategy](#prototype_strategy)
-* [Passing Constructor Arguments](#passing_constructor_arguments)
-* [Cyclical Dependency](#cyclical_dependency)
-* [Functional Object](#functional_object)
-* [Lifecycle Hook](#lifecycle_hook)
-* [Create Your Own](#create_your_own)
+* [Passive Dependency Resolution](#passive-dependency-resolution)
+* [Singleton By Default](#singleton-by-default)
+* [Prototype Strategy](#prototype-strategy)
+* [Passing Constructor Arguments](#passing-constructor-arguments)
+* [Cyclical Dependency](#cyclical-dependency)
+* [Functional Object](#functional-object)
+* [Lifecycle Hook](#lifecycle-hook)
+* [Create Your Own](#create-your-own)
 
 ### Basic Wiring
 
