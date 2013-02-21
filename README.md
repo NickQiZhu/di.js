@@ -42,6 +42,7 @@ How-to Guide
 * [Cyclical Dependency](#cyclical-dependency)
 * [Functional Object](#functional-object)
 * [Lifecycle Hook](#lifecycle-hook)
+*[Runtime Dependencies Override](runtime-dependencies-override)
 * [Create Your Own](#create-your-own)
 
 ### Basic Wiring
@@ -199,6 +200,16 @@ var MyView = Backbone.View.extend({
     ready: function(){this.render();} // called once all dependencies are satisfied
     ...
 });
+```
+
+### Runtime Dependencies Override
+What if I need to provide different dependencies different instances of the same class?
+
+```js
+ctx.register("a", A)
+    .dependencies("bee=b"); // dependencies specified here will take precedence
+...
+ctx.get("a").bee === ctx.get("b"); // true
 ```
 
 ### Create Your Own
