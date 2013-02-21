@@ -35,6 +35,14 @@ How-to Guide
 
 * [Basic Wiring](#basic-wiring)
 * [Wiring with Assignment](#wiring-with-assignment)
+* [Passive Dependency Resolution](#passive_dependency_resolution)
+* [Singleton By Default](#singleton_by_default)
+* [Prototype Strategy](#prototype_strategy)
+* [Passing Constructor Arguments](#passing_constructor_arguments)
+* [Cyclical Dependency](#cyclical_dependency)
+* [Functional Object](#functional_object)
+* [Lifecycle Hook](#lifecycle_hook)
+* [Create Your Own](#create_your_own)
 
 ### Basic Wiring
 
@@ -193,7 +201,7 @@ var MyView = Backbone.View.extend({
 });
 ```
 
-### Create your own when everything else failed
+### Create Your Own
 
 Sometimes you just don't have control over the object you want to wire or maybe you need to create the object
 and initialize before anything else is create or even registered. You can manually insert object into di-lite
