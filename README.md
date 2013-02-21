@@ -33,7 +33,8 @@ Download
 How-to Guide
 ------------
 
-* Basic Wiring(#basic-wiring)
+* [Basic Wiring](#basic-wiring)
+* [Wiring with Assignment](#wiring-with-assignment)
 
 ### Basic Wiring
 
