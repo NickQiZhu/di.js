@@ -33,6 +33,8 @@ Download
 How-to Guide
 ------------
 
+* Basic Wiring(#basic-wiring)
+
 ### Basic Wiring
 
 ```js
