@@ -42,7 +42,7 @@ How-to Guide
 * [Cyclical Dependency](#cyclical-dependency)
 * [Functional Object](#functional-object)
 * [Lifecycle Hook](#lifecycle-hook)
-*[Runtime Dependencies Override](runtime-dependencies-override)
+* [Runtime Dependencies Override](runtime-dependencies-override)
 * [Create Your Own](#create-your-own)
 
 ### Basic Wiring
