@@ -17,7 +17,7 @@ keep our code nicely isolated and testable. That's the reason behind the creatio
 implementation - to provide dependencies injection at sub-modular level.
 
 That being said di-lite is designed to be used standalone there is no dependency on Backbone or RequireJs. Its a fully
-funcitonal dependency injection container by itself while extremely lightweight and works well both in browser or node.
+functional dependency injection container by itself while extremely lightweight and works well both in browser or node.
 
 
 Install with npm
@@ -83,6 +83,17 @@ ctx.initialize();
 var instanceOfA = ctx.get("a");
 instaceOfA.bee === ctx.get("b"); // true - explicit assignment
 instaceOfA.c === ctx.get("c"); // true - implicit assignment
+```
+
+### Passive Dependency Resolution
+di-lite container resolves dependency passively on demand when ```get()``` method is invoked. It only tries to resolve
+dependency for this particular object thus only traverse its sub-dependency-tree. ```initialize()``` call does resolve
+all dependencies for all registered objects however it is actually optional (though recommended to guarantee).
+
+```js
+ctx.register("a", A);
+ctx.get("a"); // this triggers the dependency resolution for "a" alone
+ctx.initialize(); // this triggers the dependency resolution for everyone registered
 ```
 
 ### Singleton By Default
@@ -177,6 +188,24 @@ var MyView = Backbone.View.extend({
     ready: function(){this.render();} // called once all dependencies are satisfied
     ...
 });
+```
+
+### Create your own when everything else failed
+
+Sometimes you just don't have control over the object you want to wire or maybe you need to create the object
+and initialize before anything else is create or even registered. You can manually insert object into di-lite
+container and control the whole creation process this way.
+
+```js
+var hardToCreateOne = ... // get the object from somewhere or create it through super difficult process
+/* once inserted into registry this object will be available for wiring to everyone else just like
+ * any other dependency managed by
+ */
+ctx.register("hardToCreateOne", HardToCreateClass).object(hardToCreateOne);
+...
+ctx.get("hardToCreateOne").doSomething(); // you can use it since it is already created and initialized
+...
+ctx.initialize(); // initialize the rest of the objects
 ```
 
 How to build di-lite locally
