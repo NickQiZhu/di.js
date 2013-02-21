@@ -39,7 +39,8 @@ di = {
 
         ctx.initialize = function () {
             for (var name in ctx.map) {
-                ctx.ready(ctx.inject(name, ctx.get(name)));
+                var entry = ctx.map[name];
+                ctx.ready(ctx.inject(name, ctx.get(name), entry.dependencies()));
             }
         };
 
@@ -52,9 +53,11 @@ di = {
             return s;
         }
 
-        ctx.inject = function (name, o) {
-            if (o && o.dependencies) {
-                var depExpList = removeSpaces(o.dependencies).split(",");
+        ctx.inject = function (name, o, dependencies) {
+            dependencies = dependencies?dependencies:o.dependencies;
+
+            if (o && dependencies) {
+                var depExpList = removeSpaces(dependencies).split(",");
 
                 depExpList.forEach(function (depExp) {
                     if (depExp) {
@@ -112,10 +115,11 @@ di = {
         var strategy = di.strategy.singleton;
         var args;
         var factory = di.factory.constructor;
+        var dependencies;
 
         entry.object = function (o) {
             if (!arguments.length) {
-                object = strategy(name, object, factory, type, args, ctx);
+                object = strategy(name, object, factory, type, args, ctx, dependencies);
                 return object;
             } else {
                 object = o;
@@ -135,6 +139,12 @@ di = {
             return entry;
         };
 
+        entry.dependencies = function (d) {
+            if (!arguments.length) return dependencies;
+            dependencies = d;
+            return entry;
+        };
+
         entry.args = function (a) {
             if (!arguments.length) return args;
             args = a;
@@ -151,10 +161,10 @@ di = {
     },
 
     strategy: {
-        proto: function (name, object, factory, type, args, ctx) {
+        proto: function (name, object, factory, type, args, ctx, dependencies) {
             return ctx.ready(ctx.inject(name, factory(type, args)));
         },
-        singleton: function (name, object, factory, type, args, ctx) {
+        singleton: function (name, object, factory, type, args, ctx, dependencies) {
             if (!object)
                 object = factory(type, args);
 

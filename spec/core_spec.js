@@ -222,6 +222,19 @@ describe("context", function () {
                     expect(err).toBe("Dependency [a.b]->[b] is overriding existing property");
                 }
             });
+
+            it("will report error if dependency wiring is overriding existing property", function () {
+                ctx.register("a",function () {
+                    return {};
+                }).factory(di.factory.func).dependencies("b=b");
+
+                ctx.register("b",function () {
+                    return {};
+                }).factory(di.factory.func);
+
+                ctx.initialize();
+                expect(ctx.get("a").b === ctx.get("b")).toBeTruthy();
+            });
         });
     });
 
