@@ -4,10 +4,142 @@
     <title>di-lite.js - Ultra-light Javascript Dependency Injection Library</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/todos.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link href='highlighter/shCore.css' rel='stylesheet' type='text/css'/>
+    <link href='highlighter/shThemeDefault.css' rel='stylesheet' type='text/css'/>
+    <script src='highlighter/shCore.js' type='text/javascript'></script>
+    <script src="highlighter/shAutoloader.js" type="text/javascript"></script>
+    <script src='highlighter/shBrushJScript.js' type='text/javascript'></script>
+    <script src='highlighter/shBrushXml.js' type='text/javascript'></script>
+
+    <script type="text/javascript" src="js/di-lite.js"></script>
 </head>
 <body>
-<script src="http://code.jquery.com/jquery.js"></script>
+
+<div class="container">
+    <h2>di-lite.js - Ultra-light Javascript Dependency Injection Library</h2>
+
+    <p>
+        di-lite is designed to act as a minimalistic dependency injection container in Javascript.
+        It has no dependency on any other framework such as CommonJs or RequireJs in contrary to some
+        of other more heavy weight DI container implementation on the web.
+    </p>
+
+    <p>
+        di-lite was initially extracted from a Backbone.js based application. In this application, RequireJs
+        was used to wire dependencies at module level. Each module could contain multiple views and models.
+        We found using RequireJs to wire every individual view and model is a bit of overkill and verbose,
+        however we still want the inversion of control to keep our code nicely isolated and testable. That's
+        the reason behind the creation of this lightweight container implementation - to provide dependencies
+        injection at sub-modular level.
+
+        That being said di-lite is designed to be used standalone there is no dependency on Backbone or RequireJs.
+        Its a fully functional dependency injection container by itself while extremely lightweight and works well
+        both in browser or node.
+    </p>
+
+    <p>
+        Fork me @ <a href="https://github.com/NickQiZhu/di.js">https://github.com/NickQiZhu/di.js</a> and
+        also feel free to report any issue you have found.
+    </p>
+
+    <p>
+        The following is a modified <a href="http://backbonejs.org/examples/todos/index.html">Backbone.js Todos</a>
+        example to demonstrate how di-lite can be leveraged to provide dependency injection in such application.
+    </p>
+
+    <div class="row" style="margin-top: 30px;">
+        <div id="todoapp" class="span8 offset2">
+
+            <header>
+                <h1>Todos</h1>
+                <input id="new-todo" placeholder="What needs to be done?" type="text">
+            </header>
+
+            <section style="display: none;" id="main">
+                <input checked="checked" id="toggle-all" type="checkbox">
+                <label for="toggle-all">Mark all as complete</label>
+                <ul id="todo-list"></ul>
+            </section>
+
+            <footer style="display: none;">
+                <a id="clear-completed">Clear completed</a>
+
+                <div id="todo-count"></div>
+            </footer>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="instructions" class="offset2">
+            Double-click to edit a todo.
+        </div>
+
+        <div id="credits" class="offset2">
+            Created by
+            <br>
+            <a href="http://jgn.me/">Jérôme Gravel-Niquet</a>.
+            <br>Rewritten by: <a href="http://addyosmani.github.com/todomvc">TodoMVC</a>.
+            <br>Rewritten again by Nick Zhu using: <a href="https://github.com/NickQiZhu/di.js">di-lite.js</a>.
+        </div>
+    </div>
+</div>
+
+<script src="js/json2.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/underscore.js"></script>
+<script src="js/backbone.js"></script>
+<script src="js/backbone-localstorage.js"></script>
+<script src="js/todos.js"></script>
+
+<!-- Templates -->
+<script type="text/template" id="item-template">
+    <div class="view">
+        <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+        <label><%- title %></label>
+        <a class="destroy"></a>
+    </div>
+    <input class="edit" type="text" value="<%- title %>"/>
+</script>
+
+<script type="text/template" id="stats-template">
+    <% if (done) { %>
+    <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
+    <% } %>
+    <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
+</script>
+
+
+<a href="https://github.com/NickQiZhu/di.js">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+         src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
+         alt="Fork me on GitHub">
+</a>
+
 <script src="js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33628816-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+
 </body>
 </html>
