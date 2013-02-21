@@ -221,7 +221,7 @@ container and control the whole creation process this way.
 ```js
 var hardToCreateOne = ... // get the object from somewhere or create it through super difficult process
 /* once inserted into registry this object will be available for wiring to everyone else just like
- * any other dependency managed by
+ * any other dependency managed by the container
  */
 ctx.register("hardToCreateOne", HardToCreateClass).object(hardToCreateOne);
 ...
