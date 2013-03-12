@@ -164,6 +164,18 @@ describe("context", function () {
                 expect(ctx.get("b").a.b === ctx.get("b")).toBeTruthy();
             });
 
+            it("can perform incremental dependency resolution", function () {
+                ctx.register("a",function () {
+                    return {dependencies: "b"};
+                }).factory(di.factory.func);
+                ctx.register("b",function () {
+                    return {};
+                }).factory(di.factory.func);
+
+                expect(ctx.get("a")).not.toBe(null);
+                expect(ctx.get("a").b).not.toBe(undefined);
+            });
+
             it("can resolve dependencies with assignment", function () {
                 ctx.register("a",function () {
                     return {dependencies: " bee = b ,be=b "};

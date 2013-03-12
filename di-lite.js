@@ -12,11 +12,29 @@
  *  limitations under the License.
  */
 di = {
-    version: "0.3.0",
+    version: "0.3.2",
     createContext: function () {
         var ctx = {
             map: {}
         };
+
+        function resolve(ctx, name) {
+            var entry = ctx.map[name];
+            var object;
+
+            if (!entry.resolved()) {
+                object = ctx.ready(ctx.inject(name, entry, entry.dependencies()));
+            } else {
+                object = entry.object();
+            }
+
+            return object;
+        }
+
+        function removeSpaces(s) {
+            while (s.indexOf(" ") >= 0) s = s.replace(" ", "");
+            return s;
+        }
 
         ctx.register = function (name, type, args) {
             var entry = di.entry(name, ctx)
@@ -28,19 +46,19 @@ di = {
 
         ctx.has = function (name) {
             return ctx.map[name] != null;
-        }
+        };
 
         ctx.get = function (name) {
-            if (ctx.has(name))
-                return ctx.map[name].object();
-            else
+            if (ctx.has(name)) {
+                return resolve(ctx, name);
+            } else {
                 return null;
+            }
         };
 
         ctx.initialize = function () {
             for (var name in ctx.map) {
-                var entry = ctx.map[name];
-                ctx.ready(ctx.inject(name, ctx.get(name), entry.dependencies()));
+                resolve(ctx, name);
             }
         };
 
@@ -48,13 +66,11 @@ di = {
             this.map = {};
         };
 
-        function removeSpaces(s) {
-            while (s.indexOf(" ") >= 0) s = s.replace(" ", "")
-            return s;
-        }
-
-        ctx.inject = function (name, o, dependencies) {
+        ctx.inject = function (name, entry, dependencies) {
+            var o = entry.object();
             dependencies = dependencies?dependencies:o.dependencies;
+
+            entry.resolved(true);
 
             if (o && dependencies) {
                 var depExpList = removeSpaces(dependencies).split(",");
@@ -77,14 +93,14 @@ di = {
             }
 
             return o;
-        }
+        };
 
         ctx.ready = function (o) {
             if (typeof o.ready === 'function')
                 o.ready();
 
             return o;
-        }
+        };
 
         return ctx;
     },
@@ -109,13 +125,13 @@ di = {
 
     entry: function (name, ctx) {
         var entry = {};
-        var name;
         var type;
         var object;
         var strategy = di.strategy.singleton;
         var args;
         var factory = di.factory.constructor;
         var dependencies;
+        var resolved;
 
         entry.object = function (o) {
             if (!arguments.length) {
@@ -157,12 +173,18 @@ di = {
             return entry;
         };
 
+        entry.resolved = function (r) {
+            if (!arguments.length) return resolved;
+            resolved = r;
+            return entry;
+        };
+
         return entry;
     },
 
     strategy: {
         proto: function (name, object, factory, type, args, ctx, dependencies) {
-            return ctx.ready(ctx.inject(name, factory(type, args)));
+            return factory(type, args);
         },
         singleton: function (name, object, factory, type, args, ctx, dependencies) {
             if (!object)
