@@ -12,7 +12,7 @@
  *  limitations under the License.
  */
 di = {
-    version: "0.3.0",
+    version: "0.3.1",
     createContext: function () {
         var ctx = {
             map: {}
