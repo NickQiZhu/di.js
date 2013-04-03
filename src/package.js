@@ -11,11 +11,11 @@ require("util").puts(JSON.stringify({
   "dependencies": {
   },
   "devDependencies": {
-    "uglify-js": "2.2.1",
-    "jasmine-node": "1.2.3",
-    "jquery": "1.8.3",
-    "sinon": "1.5.2",
-    "backbone": "0.9.10"
+    "uglify-js": "2.x",
+    "jasmine-node": "1.x",
+    "jquery": "1.x",
+    "sinon": "1.x",
+    "backbone": "0.9.x"
   },
   "scripts": {"test": "./node_modules/jasmine-node/bin/jasmine-node spec"}
 }, null, 2));

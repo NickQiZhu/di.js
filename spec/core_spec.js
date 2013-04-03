@@ -48,6 +48,16 @@ describe("context", function () {
         expect(profile() === profile()).toBeTruthy();
     });
 
+    it("throw exception if object is not registered", function () {
+        try {
+            ctx.get("non-exist");
+        } catch (e) {
+            return;
+        }
+
+        throw "Failed";
+    });
+
     it("can support prototype strategy", function () {
         ctx.clear();
 
@@ -180,15 +190,44 @@ describe("context", function () {
 
             it("can resolve dependencies from prototype to prototype", function () {
                 ctx.register("a",function () {
-                    return {time: new Date().getMilliseconds(), dependencies: "b"};
+                    return {dependencies: "b"};
                 }).factory(di.factory.func).strategy(di.strategy.proto);
+                ctx.register("b",function () {
+                    return {};
+                }).factory(di.factory.func).strategy(di.strategy.proto);
+
+                ctx.initialize();
+
+                expect(ctx.get("a").b).not.toBe(null);
+            });
+
+            it("should throw exception if try to create non-exist object", function () {
+                try {
+                    expect(ctx.create("a", 90)).toThrow();
+                } catch (e) {
+                    return;
+                }
+
+                throw "Failed";
+            });
+
+            it("should allow creating prototype instance with dependencies", function () {
+                ctx.register("a",function (val) {
+                    return {value: val, dependencies: "b"};
+                }, 10).factory(di.factory.func).strategy(di.strategy.proto);
                 ctx.register("b",function () {
                     return {};
                 }).factory(di.factory.func);
 
                 ctx.initialize();
 
-                expect(ctx.get("a").b === ctx.get("b")).toBeTruthy();
+                var a = ctx.create("a", 90);
+                expect(a.value).toBe(90);
+                expect(ctx.get("a").b === ctx.get("b")).toBe(true);
+
+                a = ctx.create("a");
+                expect(a.value).toBe(10);
+                expect(ctx.get("a").b === ctx.get("b")).toBe(true);
             });
 
             it("should ignore empty dependencies", function () {
@@ -214,9 +253,11 @@ describe("context", function () {
 
                 try {
                     ctx.initialize();
-                } catch (err) {
-                    expect(err).toBe("Dependency [a.b]->[b] can not be satisfied");
+                } catch (e) {
+                    return;
                 }
+
+                throw "Failed";
             });
 
             it("should allow dependencies override", function () {

@@ -12,7 +12,7 @@
  *  limitations under the License.
  */
 di = {
-    version: "0.3.1",
+    version: "0.3.2",
     createContext: function () {
         var ctx = {
             map: {}
@@ -34,7 +34,14 @@ di = {
             if (ctx.has(name))
                 return ctx.map[name].object();
             else
-                return null;
+                throw "Object[" + name + "] is not registered";
+        };
+
+        ctx.create = function (name, args) {
+            if (ctx.has(name))
+                return ctx.map[name].create(args);
+            else
+                throw "Object[" + name + "] is not registered";
         };
 
         ctx.initialize = function () {
@@ -54,7 +61,7 @@ di = {
         }
 
         ctx.inject = function (name, o, dependencies) {
-            dependencies = dependencies?dependencies:o.dependencies;
+            dependencies = dependencies ? dependencies : o.dependencies;
 
             if (o && dependencies) {
                 var depExpList = removeSpaces(dependencies).split(",");
@@ -114,9 +121,13 @@ di = {
         var factory = di.factory.constructor;
         var dependencies;
 
+        entry.create = function(newArgs){
+            return strategy(name, object, factory, type, newArgs?newArgs:args, ctx, dependencies);
+        };
+
         entry.object = function (o) {
             if (!arguments.length) {
-                object = strategy(name, object, factory, type, args, ctx, dependencies);
+                object = entry.create();
                 return object;
             } else {
                 object = o;
