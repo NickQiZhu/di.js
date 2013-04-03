@@ -178,6 +178,19 @@ describe("context", function () {
                 expect(ctx.get("a").be === ctx.get("b")).toBeTruthy();
             });
 
+            it("can resolve dependencies from prototype to prototype", function () {
+                ctx.register("a",function () {
+                    return {time: new Date().getMilliseconds(), dependencies: "b"};
+                }).factory(di.factory.func).strategy(di.strategy.proto);
+                ctx.register("b",function () {
+                    return {};
+                }).factory(di.factory.func);
+
+                ctx.initialize();
+
+                expect(ctx.get("a").b === ctx.get("b")).toBeTruthy();
+            });
+
             it("should ignore empty dependencies", function () {
                 ctx.register("a",function () {
                     return {dependencies: " "};
@@ -206,27 +219,23 @@ describe("context", function () {
                 }
             });
 
-            it("will report error if dependency wiring is overriding existing property", function () {
+            it("should allow dependencies override", function () {
                 ctx.register("a",function () {
-                    return {dependencies: "b", b: {}};
-                }).factory(di.factory.func);
+                    return {};
+                }).factory(di.factory.func).dependencies("b=b");
 
                 ctx.register("b",function () {
                     return {};
                 }).factory(di.factory.func);
 
-                try {
-                    ctx.initialize();
-                    expect.fail();
-                } catch (err) {
-                    expect(err).toBe("Dependency [a.b]->[b] is overriding existing property");
-                }
+                ctx.initialize();
+                expect(ctx.get("a").b === ctx.get("b")).toBeTruthy();
             });
 
-            it("will report error if dependency wiring is overriding existing property", function () {
+            it("should allow dependencies override", function () {
                 ctx.register("a",function () {
                     return {};
-                }).factory(di.factory.func).dependencies("b=b");
+                }).strategy(di.strategy.proto).factory(di.factory.func).dependencies("b=b");
 
                 ctx.register("b",function () {
                     return {};

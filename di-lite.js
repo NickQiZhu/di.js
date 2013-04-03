@@ -68,9 +68,6 @@ di = {
                         if (dep == null)
                             throw "Dependency [" + name + "." + exp.property + "]->[" + exp.name + "] can not be satisfied";
 
-                        if (o[exp.property] != null)
-                            throw "Dependency [" + name + "." + exp.property + "]->[" + exp.name + "] is overriding existing property";
-
                         o[exp.property] = dep;
                     }
                 });
@@ -162,7 +159,8 @@ di = {
 
     strategy: {
         proto: function (name, object, factory, type, args, ctx, dependencies) {
-            return ctx.ready(ctx.inject(name, factory(type, args)));
+            object = factory(type, args);
+            return ctx.ready(ctx.inject(name, object, dependencies));
         },
         singleton: function (name, object, factory, type, args, ctx, dependencies) {
             if (!object)
