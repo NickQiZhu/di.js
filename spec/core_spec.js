@@ -203,7 +203,7 @@ describe("context", function () {
 
             it("should throw exception if try to create non-exist object", function () {
                 try {
-                    expect(ctx.create("a", 90)).toThrow();
+                    ctx.create("a", 90);
                 } catch (e) {
                     return;
                 }
@@ -228,6 +228,20 @@ describe("context", function () {
                 a = ctx.create("a");
                 expect(a.value).toBe(10);
                 expect(ctx.get("a").b === ctx.get("b")).toBe(true);
+            });
+
+            it("should throw exception if try to create singleton object", function () {
+                ctx.register("a",function () {
+                    return {};
+                }).factory(di.factory.func);
+
+                try {
+                    ctx.create("a");
+                } catch (e) {
+                    return;
+                }
+
+                throw "Failed";
             });
 
             it("should ignore empty dependencies", function () {

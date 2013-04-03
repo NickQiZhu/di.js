@@ -18,6 +18,10 @@ di = {
             map: {}
         };
 
+        ctx.entry = function (name) {
+            return ctx.map[name];
+        };
+
         ctx.register = function (name, type, args) {
             var entry = di.entry(name, ctx)
                 .type(type)
@@ -27,26 +31,29 @@ di = {
         };
 
         ctx.has = function (name) {
-            return ctx.map[name] != null;
+            return ctx.entry(name) != null;
         }
 
         ctx.get = function (name) {
             if (ctx.has(name))
-                return ctx.map[name].object();
+                return ctx.entry(name).object();
             else
                 throw "Object[" + name + "] is not registered";
         };
 
         ctx.create = function (name, args) {
+            if (ctx.entry(name).strategy() != di.strategy.proto)
+                throw "Attempt to create singleton object";
+
             if (ctx.has(name))
-                return ctx.map[name].create(args);
+                return ctx.entry(name).create(args);
             else
                 throw "Object[" + name + "] is not registered";
         };
 
         ctx.initialize = function () {
             for (var name in ctx.map) {
-                var entry = ctx.map[name];
+                var entry = ctx.entry(name);
                 ctx.ready(ctx.inject(name, ctx.get(name), entry.dependencies()));
             }
         };
@@ -121,8 +128,8 @@ di = {
         var factory = di.factory.constructor;
         var dependencies;
 
-        entry.create = function(newArgs){
-            return strategy(name, object, factory, type, newArgs?newArgs:args, ctx, dependencies);
+        entry.create = function (newArgs) {
+            return strategy(name, object, factory, type, newArgs ? newArgs : args, ctx, dependencies);
         };
 
         entry.object = function (o) {
