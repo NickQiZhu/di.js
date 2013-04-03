@@ -124,6 +124,7 @@ to configure your registration with ```di.strategy.proto``` cache strategy.
 ```js
 ctx.register("prototype", A).strategy(di.strategy.proto);
 ctx.get("prototype") === ctx.get("prototype"); // false
+ctx.create("prototype", 100); // create can be used if you want to explicitly pass in a new parameter
 ```
 
 ### Passing Constructor Arguments
@@ -219,13 +220,9 @@ and initialize before anything else is create or even registered. You can manual
 container and control the whole creation process this way.
 
 ```js
-var hardToCreateOne = ... // get the object from somewhere or create it through super difficult process
-/* once inserted into registry this object will be available for wiring to everyone else just like
- * any other dependency managed by the container
- */
-ctx.register("hardToCreateOne", HardToCreateClass).object(hardToCreateOne);
+ctx.register("history").object(Backbone.history);
 ...
-ctx.get("hardToCreateOne").doSomething(); // you can use it since it is already created and initialized
+ctx.get("history").start(); // you can use it since it is already created and initialized
 ...
 ctx.initialize(); // initialize the rest of the objects
 ```
