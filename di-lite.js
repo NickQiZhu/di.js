@@ -53,8 +53,10 @@ di = {
 
         ctx.initialize = function () {
             for (var name in ctx.map) {
-                var entry = ctx.entry(name);
-                ctx.ready(ctx.inject(name, ctx.get(name), entry.dependencies()));
+                if (ctx.map.hasOwnProperty(name)) {
+                    var entry = ctx.entry(name);
+                    ctx.ready(ctx.inject(name, ctx.get(name), entry.dependencies()));
+                }
             }
         };
 
