@@ -1,5 +1,4 @@
-
-di-lite.coffee
+di-lite.coffee [![Build Status](https://travis-ci.org/squareteam/di.coffee.png?branch=master)](https://travis-ci.org/squareteam/di.coffee) [![Dependency Status](https://gemnasium.com/squareteam/di.coffee.png)](https://gemnasium.com/squareteam/di.coffee)
 ==========
 
 di-lite is designed to act as a minimalistic dependency injection container in Javascript. It has no dependency on
@@ -237,12 +236,21 @@ Make sure the following packages are installed on your machine
 
 ### Install dependencies
 
+```bash
 di-lite$ npm install
+```
 
 ### Build
 
+```bash
 di-lite$ grunt build
+```
 
+### Tests
+
+```bash
+di-lite$ grunt test
+```
 
 License
 --------------------
