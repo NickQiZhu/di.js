@@ -20,24 +20,27 @@ module.exports = function(grunt) {
         }
       }
     },
-    clean: ["/dist/*"]//,
-    //jasmine : {
-    //   src: 'src/*.js',
-    //   options: {
-    //       specs: 'spec/*_spec.js',
-    //       vendor : [".grunt/grunt-contrib-jasmine/require.js"]
-    //   }
-    //}
+    clean: ["/dist/*"],
+    jasmine_node: {
+      options: {
+        forceExit: true,
+        match: '.',
+        matchall: false,
+        extensions: 'js',
+        specNameMatcher: 'spec',
+      },
+      all: ['spec/']
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  //grunt.loadNpmTasks('grunt-contrib-jasmine'); 
+  grunt.loadNpmTasks('grunt-jasmine-node'); 
  
   grunt.registerTask('build', ['clean', 'concat', 'uglify']);
 
-  //grunt.registerTask('test', ['build', 'jasmine']);
+  grunt.registerTask('test', ['jasmine_node']);
 
   grunt.registerTask('default', ['build']);  
 };

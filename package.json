@@ -26,11 +26,13 @@
     "grunt-contrib-clean" : "0.4.x",
     "grunt-contrib-uglify" : "0.4.x",
     "grunt-contrib-concat" : "0.3.x",
+    "grunt-jasmine-node" : "0.2.x",
     "uglify-js": "2.x",
     "jquery": "1.x",
     "sinon": "1.x",
     "backbone": "0.9.x"
   },
   "scripts": {
+    "test": "grunt test"
   }
 }
