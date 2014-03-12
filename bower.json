@@ -1,0 +1,12 @@
+{
+  "name": "di-lite",
+  "main": "dist/di-lite.js",
+  "version": "0.3.3",
+  "description": "A ultra light-weight dependency injection container in Javascript ",
+  "author": {
+    "name": "Nick Zhu",
+    "url": "http://nzhu.blogspot.ca/"
+  },
+  "contributors": ["Charly POLY <cpoly55@gmail.com>"],
+  "license": "Apache 2"
+}
