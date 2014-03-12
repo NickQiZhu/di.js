@@ -4,6 +4,7 @@
 
 # local files
 node_modules
+.grunt/
 
 # ide files
 *.iml

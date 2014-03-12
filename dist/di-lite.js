@@ -53,10 +53,8 @@ di = {
 
         ctx.initialize = function () {
             for (var name in ctx.map) {
-                if (ctx.map.hasOwnProperty(name)) {
-                    var entry = ctx.entry(name);
-                    ctx.ready(ctx.inject(name, ctx.get(name), entry.dependencies()));
-                }
+                var entry = ctx.entry(name);
+                ctx.ready(ctx.inject(name, ctx.get(name), entry.dependencies()));
             }
         };
 
@@ -207,7 +205,7 @@ di = {
             }
         }
     }
-};di.utils = {};
+};;di.utils = {};
 
 di.utils.invokeStmt = function (args, op) {
     var exp = op ? op : "";
