@@ -15,6 +15,7 @@
     "name": "Nick Zhu",
     "url": "http://nzhu.blogspot.ca/"
   },
+  "contributors": ["Charly POLY <cpoly55@gmail.com>"],
   "repository": {
     "type": "git",
     "url": "https://github.com/NickQiZhu/di.js.git"
