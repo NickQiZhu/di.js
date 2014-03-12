@@ -1,6 +1,5 @@
-[![build status](https://secure.travis-ci.org/NickQiZhu/di.js.png)](http://travis-ci.org/NickQiZhu/di.js)
 
-di-lite.js
+di-lite.coffee
 ==========
 
 di-lite is designed to act as a minimalistic dependency injection container in Javascript. It has no dependency on
@@ -235,15 +234,14 @@ How to build di-lite locally
 Make sure the following packages are installed on your machine
 * node.js
 * npm
-* apache ant
 
 ### Install dependencies
 
 di-lite$ npm install
 
-### Build and Test
+### Build
 
-di-lite$ ./make
+di-lite$ grunt build
 
 
 License
