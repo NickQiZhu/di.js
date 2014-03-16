@@ -1,6 +1,4 @@
-[![build status](https://secure.travis-ci.org/NickQiZhu/di.js.png)](http://travis-ci.org/NickQiZhu/di.js)
-
-di-lite.js
+di-lite.coffee [![Build Status](https://travis-ci.org/squareteam/di.coffee.png?branch=master)](https://travis-ci.org/squareteam/di.coffee) [![Dependency Status](https://gemnasium.com/squareteam/di.coffee.png)](https://gemnasium.com/squareteam/di.coffee)
 ==========
 
 di-lite is designed to act as a minimalistic dependency injection container in Javascript. It has no dependency on
@@ -235,16 +233,24 @@ How to build di-lite locally
 Make sure the following packages are installed on your machine
 * node.js
 * npm
-* apache ant
 
 ### Install dependencies
 
+```bash
 di-lite$ npm install
+```
 
-### Build and Test
+### Build
 
-di-lite$ ./make
+```bash
+di-lite$ grunt build
+```
 
+### Tests
+
+```bash
+di-lite$ grunt test
+```
 
 License
 --------------------
