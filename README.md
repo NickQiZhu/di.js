@@ -70,8 +70,8 @@ ctx.register("c", C);
 ctx.initialize();
 
 var instanceOfA = ctx.get("a");
-instaceOfA.b === ctx.get("b"); // true
-instaceOfA.c === ctx.get("c"); // true
+instanceOfA.b === ctx.get("b"); // true
+instanceOfA.c === ctx.get("c"); // true
 
 var instanceOfB = ctx.get("b");
 instanceOfB.c === ctx.get("c"); // true
@@ -91,8 +91,8 @@ var A = function(){
 ctx.initialize();
 
 var instanceOfA = ctx.get("a");
-instaceOfA.bee === ctx.get("b"); // true - explicit assignment
-instaceOfA.c === ctx.get("c"); // true - implicit assignment
+instanceOfA.bee === ctx.get("b"); // true - explicit assignment
+instanceOfA.c   === ctx.get("c"); // true - implicit assignment
 ```
 
 ### Passive Dependency Resolution
