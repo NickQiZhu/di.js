@@ -2,6 +2,7 @@
   "name": "di-lite",
   "version": "0.3.3",
   "description": "A ultra light-weight dependency injection container in Javascript ",
+  "main": "dist/di-lite.js",
   "keywords": [
     "di",
     "ioc",
