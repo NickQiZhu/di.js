@@ -358,15 +358,15 @@ describe("context", function () {
 
             it("should construct a new proto instance on each invocation", function () {
                 var constructionsCount = 0;
+                var aProto = function () { constructionsCount++; };
 
-                ctx.register("a", function () {
-                    constructionsCount++;
-                });
+                ctx.register("a", aProto)
+                    .strategy(di.strategy.proto);
                 
-                ctx.get("a");
-                ctx.get("a");
-                ctx.get("a");
-                expect(constructionsCount).toBe(1);
+                for (var i = 0; i < 3; i++)
+                    ctx.get("a");
+
+                expect(constructionsCount).toBe(3);
             });
 
         });
