@@ -36,7 +36,7 @@ di = {
 
         ctx.get = function (name) {
             if (ctx.has(name))
-                return ctx.entry(name).object();
+                return ctx.entry(name).create();
             else
                 throw "Object[" + name + "] is not registered";
         };
@@ -53,8 +53,7 @@ di = {
 
         ctx.initialize = function () {
             for (var name in ctx.map) {
-                var entry = ctx.entry(name);
-                ctx.ready(ctx.inject(name, ctx.get(name), entry.dependencies()));
+                ctx.get(name);
             }
         };
 
@@ -120,24 +119,23 @@ di = {
 
     entry: function (name, ctx) {
         var entry = {};
-        var name;
         var type;
-        var object;
+        var state = {};
         var strategy = di.strategy.singleton;
         var args;
         var factory = di.factory.constructor;
         var dependencies;
 
         entry.create = function (newArgs) {
-            return strategy(name, object, factory, type, newArgs ? newArgs : args, ctx, dependencies);
+            return strategy(name, state, factory, type, newArgs ? newArgs : args, ctx, dependencies);
         };
 
         entry.object = function (o) {
             if (!arguments.length) {
-                object = entry.create();
-                return object;
+                entry.create();
+                return state.object;
             } else {
-                object = o;
+                state.object = o;
                 return entry;
             }
         };
@@ -176,15 +174,19 @@ di = {
     },
 
     strategy: {
-        proto: function (name, object, factory, type, args, ctx, dependencies) {
-            object = factory(type, args);
-            return ctx.ready(ctx.inject(name, object, dependencies));
+        proto: function (name, state, factory, type, args, ctx, dependencies) {
+            var instance = factory(type, args);
+            return ctx.ready(ctx.inject(name, instance, dependencies));
         },
-        singleton: function (name, object, factory, type, args, ctx, dependencies) {
-            if (!object)
-                object = factory(type, args);
+        singleton: function (name, state, factory, type, args, ctx, dependencies) {
+            if(state.instance) {
+                return state.instance;
+            }
 
-            return object;
+            state.instance = factory(type, args);
+            ctx.ready(ctx.inject(name, state.instance, dependencies));
+
+            return state.instance;
         }
     },
 

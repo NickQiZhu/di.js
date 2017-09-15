@@ -300,6 +300,76 @@ describe("context", function () {
                 expect(ctx.get("a").b === ctx.get("b")).toBeTruthy();
             });
         });
+
+        describe("just in time creation - ", function(){
+            it("should construct a singleton 'just in time'", function () {
+                var constructionsCount = 0;
+
+                ctx.register("a", function () {
+                    constructionsCount++;
+                });
+                expect(constructionsCount).toBe(0);
+                
+                ctx.get("a");
+                expect(constructionsCount).toBe(1);
+            });
+
+            it("should construct dependencies on first use", function () {
+                var constructionsCount = 0;
+                ctx.register("a", function () {})
+                    .dependencies("dep");
+
+                ctx.register("dep", function () {
+                    constructionsCount++;
+                });
+                expect(constructionsCount).toBe(0);
+                
+                ctx.get("a");
+                expect(constructionsCount).toBe(1);
+            });
+
+            it("should not construct a singleton more than once", function () {
+                var constructionsCount = 0;
+
+                ctx.register("a", function () {
+                    constructionsCount++;
+                });
+                
+                ctx.get("a");
+                ctx.get("a");
+                ctx.get("a");
+                expect(constructionsCount).toBe(1);
+            });
+
+            it("should construct singleton more then once, even when it is a dependency", function () {
+                var constructionsCount = 0;
+                ctx.register("a", function () {})
+                    .dependencies("dep");
+
+                ctx.register("dep", function () {
+                    constructionsCount++;
+                });
+                expect(constructionsCount).toBe(0);
+                
+                ctx.get("dep");
+                ctx.get("a");
+                expect(constructionsCount).toBe(1);
+            });
+
+            it("should construct a new proto instance on each invocation", function () {
+                var constructionsCount = 0;
+                var aProto = function () { constructionsCount++; };
+
+                ctx.register("a", aProto)
+                    .strategy(di.strategy.proto);
+                
+                for (var i = 0; i < 3; i++)
+                    ctx.get("a");
+
+                expect(constructionsCount).toBe(3);
+            });
+
+        });
     });
 
     describe("lifecycle", function () {
